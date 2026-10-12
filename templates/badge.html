@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block og_image %}<meta property="og:image" content="{{ site_url }}{{ b.og }}">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">{% endblock %}
+{% block body_attrs %}data-page="badge" data-badge="{{ b.id }}"{% endblock %}
+{% block main %}
+<div class="wrap section section-last badge-page">
+  <nav aria-label="Breadcrumb" class="crumbs"><a href="{{ base }}/">Academy</a><span aria-hidden="true">/</span><a href="{{ base }}/huy-hieu/">Huy hiệu</a></nav>
+  <div class="badge-hero">
+    <img class="badge-art badge-art-xl" src="{{ b.img }}" alt="Huy hiệu {{ b.name }}" width="240" height="240">
+    <div class="badge-hero-copy">
+      <p class="eyebrow">{{ b.group }}{% if b.tier %} · {{ b.tier }}{% endif %} · +{{ b.points }} điểm</p>
+      <h1>{{ b.name }}</h1>
+      <p class="lead">{{ b.desc }}</p>
+      <p class="badge-owned" data-owned hidden></p>
+      <div class="btn-row share-row">
+        <a class="btn btn-dark" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ (site_url ~ b.url) | urlencode }}">Chia sẻ Facebook</a>
+        <a class="btn btn-outline" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url={{ (site_url ~ b.url) | urlencode }}">Chia sẻ LinkedIn</a>
+        <button type="button" class="btn btn-outline" data-copy-url="{{ site_url }}{{ b.url }}">Sao chép liên kết</button>
+      </div>
+    </div>
+  </div>
+  <div class="card card-mint narrow cta-card">
+    <h2 class="h4">Bạn cũng muốn có huy hiệu này?</h2>
+    <p class="small">Học miễn phí các khoá đầu tư của DSC Academy, làm quiz cuối bài và sưu tầm huy hiệu.</p>
+    <a class="btn btn-primary" href="{{ base }}/khoa-hoc/kinh-te-vi-mo/">Bắt đầu học</a>
+  </div>
+</div>
+{% endblock %}

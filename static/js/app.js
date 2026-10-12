@@ -16,6 +16,15 @@
     s.done = s.done || {};
     s.quiz = s.quiz || {};
     s.certs = s.certs || {};
+    s.days = s.days || [];          // ngày có học (YYYY-MM-DD)
+    s.terms = s.terms || {};        // thuật ngữ đã tra
+    s.explore = s.explore || {};    // {articleSlug: {chain, sim, sort}}
+    s.quizFirst = s.quizFirst || {};// {articleSlug: true} đúng hết ngay lần đầu
+    s.flags = s.flags || {};
+    s.examPerfect = s.examPerfect || {};
+    s.badges = s.badges || {};      // huy hiệu đã nhận (thành viên)
+    s.pending = s.pending || {};    // huy hiệu tạm của khách
+    s.guestDone = s.guestDone || {};// {module: {slug: true}} bài khách đã làm đúng quiz
     return s;
   }
   var S = load();
@@ -70,11 +79,109 @@
     }
   }
 
+  function claimPending() {
+    var n = 0;
+    Object.keys(S.pending).forEach(function (id) { if (!S.badges[id]) { S.badges[id] = { date: S.pending[id] }; n++; } });
+    S.pending = {};
+    Object.keys(S.guestDone).forEach(function (m) { var dm = doneMap(m); Object.keys(S.guestDone[m]).forEach(function (s) { dm[s] = true; }); });
+    S.guestDone = {};
+    if (n) toastNext('Đã nhận ' + n + ' huy hiệu đang chờ. Tiến độ học đã được lưu.');
+  }
   function setTier(t) {
     S.tier = t;
     if (t !== 'guest' && !S.name) { S.name = 'Nguyễn Văn A'; S.account = '085C123456'; }
+    if (t !== 'guest') claimPending();
     save();
     location.reload();
+  }
+
+  // ---------- badges ----------
+  var BADGES = json('badge-data') || [];
+  function today() { var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function recordDay() { var t = today(); if (S.days.indexOf(t) < 0) { S.days.push(t); S.days.sort(); save(); } }
+  function streaks() {
+    var days = S.days.map(function (d) { return Date.parse(d + 'T00:00:00'); }), best = 0, run = 0, prev = null;
+    days.forEach(function (t) { run = (prev !== null && t - prev === 864e5) ? run + 1 : 1; best = Math.max(best, run); prev = t; });
+    var cur = 0;
+    if (days.length) {
+      var last = days[days.length - 1], now = Date.parse(today() + 'T00:00:00');
+      if (now - last <= 864e5) { cur = 1; for (var i = days.length - 1; i > 0 && days[i] - days[i - 1] === 864e5; i--) cur++; }
+    }
+    return { best: best, cur: cur };
+  }
+  function doneSource() { return isMember() ? S.done : S.guestDone; }
+  function countDone(mod) {
+    var src = doneSource(), n = 0;
+    Object.keys(src).forEach(function (m) { if (!mod || m === mod) n += Object.keys(src[m]).length; });
+    return n;
+  }
+  function progressOf(b) {
+    var r = b.rule || {};
+    if (r.articles) return [countDone(), r.articles];
+    if (r.module) return [countDone(r.module), b.total || 1];
+    if (r.quiz_first) return [Object.keys(S.quizFirst).length, r.quiz_first];
+    if (r.exam_perfect) return [S.examPerfect[r.exam_perfect] ? 1 : 0, 1];
+    if (r.streak) return [streaks().best, r.streak];
+    if (r.terms) return [Object.keys(S.terms).length, r.terms];
+    if (r.explore) {
+      var mx = 0; Object.keys(S.explore).forEach(function (k) { mx = Math.max(mx, Object.keys(S.explore[k]).length); });
+      return [mx, r.explore];
+    }
+    if (r.night_owl) return [S.flags.nightOwl ? 1 : 0, 1];
+    return [0, 1];
+  }
+  function owned(id) { return S.badges[id] || null; }
+  var queue = [];
+  function award() {
+    BADGES.forEach(function (b) {
+      var p = progressOf(b);
+      if (p[0] < p[1]) return;
+      if (isMember()) { if (!S.badges[b.id]) { S.badges[b.id] = { date: today() }; queue.push(b); } }
+      else if (!S.badges[b.id] && !S.pending[b.id]) { S.pending[b.id] = today(); queue.push(b); }
+    });
+    save();
+    showNextBadge();
+  }
+  var bm = $('[data-badge-modal]');
+  function showNextBadge() {
+    if (!bm || !bm.hidden || !queue.length) return;
+    var b = queue.shift();
+    $('[data-bm-img]', bm).src = b.img; $('[data-bm-img]', bm).alt = 'Huy hiệu ' + b.name;
+    $('[data-bm-name]', bm).textContent = b.name;
+    $('[data-bm-desc]', bm).textContent = b.desc;
+    $('[data-bm-points]', bm).textContent = '+' + b.points + ' điểm';
+    $('[data-bm-kicker]', bm).textContent = isMember() ? 'Huy hiệu mới!' : 'Bạn vừa đạt huy hiệu';
+    var sh = $('[data-bm-share]', bm); if (sh) sh.href = b.url;
+    bm.hidden = false;
+    $('[data-bm-close]', bm).focus();
+  }
+  if (bm) {
+    $('[data-bm-close]', bm).addEventListener('click', function () { bm.hidden = true; showNextBadge(); });
+    bm.addEventListener('click', function (e) { if (e.target === bm) { bm.hidden = true; showNextBadge(); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !bm.hidden) { bm.hidden = true; showNextBadge(); } });
+  }
+  function points() {
+    var p = countDone() * 10 + Object.keys(S.quizFirst).length * 5;
+    BADGES.forEach(function (b) { if (S.badges[b.id]) p += b.points; });
+    return isMember() ? p : 0;
+  }
+  function renderShelf(root) {
+    var groups = [];
+    BADGES.forEach(function (b) { if (groups.indexOf(b.group) < 0) groups.push(b.group); });
+    root.innerHTML = groups.map(function (g) {
+      return '<section class="shelf-group"><h3 class="shelf-title">' + esc(g) + '</h3><ul class="shelf">' +
+        BADGES.filter(function (b) { return b.group === g; }).map(function (b) {
+          var own = owned(b.id), pend = !own && S.pending[b.id], p = progressOf(b), secret = b.hidden && !own && !pend;
+          var pct = Math.min(100, Math.round(p[0] / p[1] * 100));
+          var status = own ? 'Đã nhận ' + own.date.split('-').reverse().join('/') : pend ? 'Đang chờ nhận · đăng nhập để lưu' : secret ? 'Tiếp tục học để khám phá' : Math.min(p[0], p[1]) + '/' + p[1];
+          var inner = '<img class="badge-art' + (own || pend ? '' : ' is-locked') + (secret ? ' is-secret' : '') + '" src="' + b.img + '" alt="" width="96" height="96">' +
+            '<span class="shelf-name">' + (secret ? 'Huy hiệu bí mật' : esc(b.name)) + (b.tier ? ' <span class="tag tag-outline tag-sm">' + esc(b.tier) + '</span>' : '') + '</span>' +
+            '<span class="shelf-desc">' + (secret ? '???' : esc(b.desc)) + '</span>' +
+            (own || secret ? '' : '<span class="bar bar-thin" aria-hidden="true"><span style="width:' + pct + '%"></span></span>') +
+            '<span class="xsmall ' + (own ? 'strong' : 'muted') + '">' + status + '</span>';
+          return '<li class="shelf-item' + (own ? ' is-owned' : '') + '">' + (own ? '<a href="' + b.url + '">' + inner + '</a>' : '<div>' + inner + '</div>') + '</li>';
+        }).join('') + '</ul></section>';
+    }).join('');
   }
 
   // demo panel
@@ -219,7 +326,20 @@
     var kickerOrig = nextKicker ? nextKicker.textContent : '';
     var already = isMember() && !!dm[articleSlug];
 
+    var anyWrong = false;
     function allRight() { return total > 0 && Object.keys(right).length === total; }
+    function noteCompletion() {
+      if (!anyWrong) S.quizFirst[articleSlug] = true;
+      var h = new Date().getHours(); if (h >= 23 || h < 4) S.flags.nightOwl = true;
+      save();
+    }
+    recordDay();
+    // badge hint for the module badge
+    var mb = BADGES.filter(function (b) { return b.rule && b.rule.module === MOD.slug; })[0], hint = $('[data-badge-hint]');
+    if (mb && hint && isMember() && !owned(mb.id)) {
+      var left = MOD.articles.length - countDone(MOD.slug);
+      if (left > 0) { hint.hidden = false; hint.textContent = 'Còn ' + left + ' bài viết nữa để nhận huy hiệu "' + mb.name + '".'; }
+    }
     function refreshQuiz() {
       var n = Object.keys(right).length;
       var bar = $('[data-quiz-bar]');
@@ -254,8 +374,15 @@
             } else {
               btn.classList.add('is-wrong'); qel.classList.remove('is-right'); delete right[qi];
               fb.innerHTML = '<strong>Chưa đúng, thử lại nhé.</strong>';
+              anyWrong = true;
             }
             refreshQuiz();
+            if (allRight() && !isMember() && !locked) {
+              S.guestDone[MOD.slug] = S.guestDone[MOD.slug] || {};
+              S.guestDone[MOD.slug][articleSlug] = true;
+              noteCompletion();
+              award();
+            }
           });
         });
       });
@@ -266,7 +393,7 @@
       nextLink.addEventListener('click', function (e) {
         if (!allRight() || already) return;
         if (!isMember()) { e.preventDefault(); $('[data-modal]').hidden = false; $('[data-modal] .btn').focus(); return; }
-        dm[articleSlug] = true; S.quiz[MOD.slug + '/' + articleSlug] = true; save();
+        dm[articleSlug] = true; S.quiz[MOD.slug + '/' + articleSlug] = true; noteCompletion();
         var idx = MOD.articles.map(function (a) { return a.slug; }).indexOf(articleSlug);
         toastNext('Đã hoàn thành bài ' + MOD.articles[idx].num + '. Tiến độ đã được cập nhật.');
       });
@@ -308,6 +435,7 @@
       pop.style.left = Math.max(16, left) + 'px';
       pop.style.top = (r.bottom + window.scrollY + 8) + 'px';
       popBtn = btn; btn.setAttribute('aria-expanded', 'true');
+      if (!S.terms[key]) { S.terms[key] = true; save(); award(); }
     }
     terms.forEach(function (btn) {
       btn.addEventListener('click', function (e) {
@@ -323,6 +451,12 @@
   }
 
   // ---------- interactive components ----------
+  function explored(kind) {
+    var slug = document.body.getAttribute('data-article') || 'x';
+    S.explore[slug] = S.explore[slug] || {};
+    if (S.explore[slug][kind]) return;
+    S.explore[slug][kind] = true; save(); award();
+  }
   function mountComponent(el) {
     var type = el.getAttribute('data-component');
     if (type === 'chain') return chain(el);
@@ -364,7 +498,7 @@
         '<div class="btn-row" style="margin-top:16px"><button type="button" class="btn btn-dark btn-sm" data-step ' + (step >= 4 ? 'disabled' : '') + '>' + (step >= 4 ? 'Đã đi hết chuỗi tác động' : 'Bước tiếp') + '</button>' +
         '<button type="button" class="btn btn-outline btn-sm" data-reset-chain>Xem lại từ đầu</button></div>';
       $$('[data-dir]', el).forEach(function (b) { b.addEventListener('click', function () { dir = b.getAttribute('data-dir'); step = 0; render(); }); });
-      $('[data-step]', el).addEventListener('click', function () { if (step < 4) { step++; render(); $('[data-step]', el).focus(); } });
+      $('[data-step]', el).addEventListener('click', function () { if (step < 4) { step++; render(); $('[data-step]', el).focus(); if (step === 4) explored('chain'); } });
       $('[data-reset-chain]', el).addEventListener('click', function () { step = 0; render(); });
     }
     render();
@@ -402,6 +536,7 @@
       input.setAttribute('aria-valuetext', sign(dr) + Math.abs(dr) + ' điểm phần trăm');
     }
     input.addEventListener('input', upd); upd();
+    input.addEventListener('change', function () { explored('sim'); });
   }
 
   function sectorSort(el) {
@@ -429,7 +564,7 @@
       $$('[data-i]', el).forEach(function (b) {
         b.addEventListener('click', function () { ans[+b.getAttribute('data-i')] = b.getAttribute('data-a'); checked = false; render(); el.querySelector('[data-i="' + b.getAttribute('data-i') + '"][data-a="' + b.getAttribute('data-a') + '"]').focus(); });
       });
-      $('[data-check]', el).addEventListener('click', function () { checked = true; render(); $('[data-check]', el).focus(); });
+      $('[data-check]', el).addEventListener('click', function () { checked = true; render(); $('[data-check]', el).focus(); if (Object.keys(ans).length === items.length) explored('sort'); });
     }
     render();
   }
@@ -463,6 +598,9 @@
       $('[data-gl-empty]').hidden = n > 0;
     }
     glSearch.addEventListener('input', filter);
+    function seen(id) { if (id && !S.terms[id]) { S.terms[id] = true; save(); award(); } }
+    items.forEach(function (it) { it.addEventListener('click', function () { seen(it.id); }); });
+    if (location.hash) seen(location.hash.slice(1));
     $$('[data-letter]', $('[data-letters]')).forEach(function (b) {
       b.addEventListener('click', function () {
         letter = b.getAttribute('data-letter');
@@ -485,9 +623,10 @@
     });
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      S.tier = form.tier.value; S.account = form.account.value; S.name = S.name || 'Nguyễn Văn A'; save();
+      S.tier = form.tier.value; S.account = form.account.value; S.name = S.name || 'Nguyễn Văn A';
       var next = new URLSearchParams(location.search).get('next');
       toastNext('Đăng nhập thành công. Xin chào ' + S.name + '!');
+      claimPending(); save();
       location.href = next && next.charAt(0) === '/' ? next : BASE + '/hoc-tap/';
     });
   }
@@ -512,8 +651,10 @@
       return '<a class="cert-mini" href="' + m.exam + '#ket-qua"><span class="ico" aria-hidden="true"></span><span><strong>' + esc(m.title) + '</strong><br><span class="xsmall muted">Cấp ' + c.date + ' · ' + c.pct + '%</span></span></a>';
     }).join('');
     if (certHtml) $('[data-certs]').innerHTML = certHtml;
-    var quizCount = Object.keys(S.quiz).length;
-    $('[data-stat=read]').textContent = read; $('[data-stat=mods]').textContent = modsDone; $('[data-stat=quiz]').textContent = quizCount; $('[data-stat=certs]').textContent = certs;
+    $('[data-stat=read]').textContent = read;
+    $('[data-stat=points]').textContent = points().toLocaleString('vi-VN');
+    $('[data-stat=streak]').textContent = streaks().cur + ' ngày';
+    $('[data-stat=badges]').textContent = Object.keys(S.badges).length + '/' + BADGES.length;
     var cc = $('[data-continue]');
     if (contTarget) {
       cc.href = contTarget.url;
@@ -526,6 +667,30 @@
       cc.href = BASE + '/#khoa-hoc';
     }
   }
+
+  // ---------- badge surfaces ----------
+  $$('[data-badge-shelf]').forEach(renderShelf);
+  var bc = $('[data-badge-count]'); if (bc) bc.textContent = Object.keys(S.badges).length + '/' + BADGES.length + ' đã nhận';
+  $$('[data-module-badge]').forEach(function (card) {
+    var b = BADGES.filter(function (x) { return x.id === card.getAttribute('data-module-badge'); })[0]; if (!b) return;
+    var st = $('[data-module-badge-status]', card), own = owned(b.id), p = progressOf(b);
+    if (own) { st.textContent = 'Đã nhận ngày ' + own.date.split('-').reverse().join('/') + '.'; card.classList.add('is-owned'); }
+    else if (isMember()) st.textContent = p[0] + '/' + p[1] + ' bài viết · còn ' + (p[1] - p[0]) + ' bài để nhận.';
+    else st.textContent = 'Đăng nhập và hoàn thành ' + p[1] + ' bài viết để nhận.';
+    $('img', card).classList.toggle('is-locked', !own);
+  });
+  var ownedEl = $('[data-owned]');
+  if (ownedEl) {
+    var o = owned(document.body.getAttribute('data-badge'));
+    if (o) { ownedEl.hidden = false; ownedEl.textContent = 'Bạn đã nhận huy hiệu này ngày ' + o.date.split('-').reverse().join('/') + '.'; }
+  }
+  $$('[data-copy-url]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var url = b.getAttribute('data-copy-url');
+      (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(function () { toast('Đã sao chép liên kết.'); }, function () { toast(url); });
+    });
+  });
+  award();
 
   // ---------- exam ----------
   var EX = json('exam-data');
@@ -579,6 +744,7 @@
         if (ans[k] === EX.answers[k]) { score++; byTopic[tp][0]++; }
       }
       var pct = Math.round(score / N * 100), pass = pct >= EX.pass, secs = Math.round((Date.now() - started) / 1000);
+      if (pct === 100) { S.examPerfect[EX.module] = true; save(); setTimeout(award, 600); }
       shell.hidden = true; result.hidden = false; result.id = 'ket-qua'; window.scrollTo(0, 0);
       $('[data-result-title]').textContent = pass ? 'Chúc mừng, bạn đã đạt!' : (auto ? 'Hết giờ. Bạn chưa đạt lần này' : 'Bạn chưa đạt lần này');
       $('[data-r-score]').textContent = score + '/' + N;

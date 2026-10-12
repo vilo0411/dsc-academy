@@ -30,10 +30,10 @@
         <span class="btn btn-primary">Đọc tiếp</span>
       </a>
       <dl class="stat-grid">
+        <div><dt>Điểm</dt><dd data-stat="points">0</dd></div>
         <div><dt>Bài viết đã đọc</dt><dd data-stat="read">0</dd></div>
-        <div><dt>Khoá học hoàn thành</dt><dd data-stat="mods">0</dd></div>
-        <div><dt>Quiz đúng hết</dt><dd data-stat="quiz">0</dd></div>
-        <div><dt>Chứng chỉ</dt><dd data-stat="certs">0</dd></div>
+        <div><dt>Chuỗi ngày học</dt><dd data-stat="streak">0</dd></div>
+        <div><dt>Huy hiệu</dt><dd data-stat="badges">0</dd></div>
       </dl>
     </div>
     <div class="two-col two-col-tight">
@@ -49,5 +49,12 @@
       </aside>
     </div>
   </div>
+  <section id="huy-hieu" class="badges-section">
+    <div class="list-head">
+      <h2 class="h3">Huy hiệu</h2>
+      <span class="small" data-badge-count></span>
+    </div>
+    <div class="badge-shelf" data-badge-shelf></div>
+  </section>
 </div>
 {% endblock %}

@@ -64,6 +64,16 @@
       </div>
       <p class="small" data-show="guest"><a class="strong" href="{{ base }}/dang-nhap/" data-login-link>Đăng nhập</a> để lưu tiến độ và tính hoàn thành bài viết.</p>
     </section>
+    {% for b in badges if b.rule.module == mod.slug %}
+    <section class="card badge-card" data-module-badge="{{ b.id }}">
+      <img class="badge-art" src="{{ b.img }}" alt="" width="72" height="72">
+      <div>
+        <p class="xsmall muted strong">Huy hiệu khoá học</p>
+        <h2 class="h4">{{ b.name }}</h2>
+        <p class="small" data-module-badge-status>Hoàn thành {{ mod.articles | length }} bài viết để nhận.</p>
+      </div>
+    </section>
+    {% endfor %}
     {% if mod.exam %}
     <section class="card">
       <h2 class="h4">Bài thi cuối khoá</h2>

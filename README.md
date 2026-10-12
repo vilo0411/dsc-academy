@@ -55,6 +55,15 @@ Component tương tác chèn bằng một dòng HTML trong bài:
 | Bài tập phân loại ngành | `<div data-component="sector-sort"></div>` |
 | Biểu đồ dữ liệu (khoá eKYC) | `<div data-component="live-rate"></div>` |
 
+## Huy hiệu và điểm
+
+Huy hiệu khai báo trong `content/badges.yaml` (tên, mô tả, điều kiện `rule`, điểm, màu và ký hiệu `art`). Khi build, mỗi huy hiệu được tạo hình SVG, ảnh chia sẻ 1200×630 và trang `/huy-hieu/<id>/` có nút chia sẻ Facebook, LinkedIn.
+
+- Điểm: 10 điểm mỗi bài viết hoàn thành, +5 nếu đúng hết quiz ngay lần đầu, cộng điểm của từng huy hiệu.
+- Khách vẫn đạt huy hiệu nhưng ở dạng "đang chờ"; đăng nhập để nhận và lưu tiến độ.
+- Điều kiện hỗ trợ: `articles`, `module`, `quiz_first`, `exam_perfect`, `streak`, `terms`, `explore`, `night_owl` (xem chú thích đầu file badges.yaml).
+- Chỉ thưởng cho việc học, không gắn với hành vi giao dịch.
+
 Thêm khoá học mới: thêm mục vào `modules.yaml` và tạo thư mục `content/khoa-hoc/<slug>/`. Khoá chưa có thư mục sẽ hiển thị "Sắp ra mắt".
 
 ## Chạy thử trên máy

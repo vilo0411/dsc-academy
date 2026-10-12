@@ -1,0 +1,85 @@
+# Huy hiệu DSC Academy.
+# rule: điều kiện đạt (xử lý trong static/js/app.js)
+#   articles: N         đọc xong N bài viết (bất kỳ khoá nào)
+#   module: slug        đọc xong toàn bộ bài của khoá
+#   quiz_first: N       N bài đúng hết quiz ngay lần đầu
+#   exam_perfect: slug  bài thi cuối khoá đạt 100%
+#   streak: N           học N ngày liên tiếp
+#   terms: N            tra N thuật ngữ khác nhau
+#   explore: N          dùng N phần tương tác trong bài
+#   night_owl: true     hoàn thành bài viết từ 23h đến 4h
+# art: bg, a, b, c = màu khối; glyph = ký hiệu trên huy hiệu; layout 1-4
+- id: bai-viet-dau-tien
+  name: Bước chân đầu tiên
+  desc: Hoàn thành bài viết đầu tiên.
+  group: Hoàn thành
+  rule: {articles: 1}
+  points: 10
+  art: {bg: "#272d2b", a: "#2ad03d", b: "#8cffcc", c: "#1bbe72", glyph: "01", layout: 1}
+- id: nha-quan-sat-vi-mo
+  name: Nhà quan sát vĩ mô
+  desc: Hoàn thành toàn bộ 12 bài viết khoá Kinh tế vĩ mô.
+  group: Hoàn thành
+  rule: {module: kinh-te-vi-mo}
+  points: 50
+  art: {bg: "#1d4130", a: "#2ad03d", b: "#8cffcc", c: "#ffffff", glyph: "VM", layout: 2}
+- id: tra-loi-chuan-xac
+  name: Trả lời chuẩn xác
+  desc: Đúng hết quiz ngay lần đầu ở 5 bài viết.
+  group: Thành tích
+  rule: {quiz_first: 5}
+  points: 25
+  art: {bg: "#ffffff", a: "#272d2b", b: "#2ad03d", c: "#1bbe72", glyph: "5/5", layout: 3}
+- id: diem-tuyet-doi
+  name: Điểm tuyệt đối
+  desc: Đạt 100% bài thi cuối khoá Kinh tế vĩ mô.
+  group: Thành tích
+  rule: {exam_perfect: kinh-te-vi-mo}
+  points: 100
+  art: {bg: "#2ad03d", a: "#272d2b", b: "#1d4130", c: "#8cffcc", glyph: "100", layout: 4}
+- id: chuoi-3-ngay
+  name: Chuỗi 3 ngày
+  desc: Học 3 ngày liên tiếp.
+  group: Thói quen
+  tier: Đồng
+  rule: {streak: 3}
+  points: 15
+  art: {bg: "#8cffcc", a: "#272d2b", b: "#1bbe72", c: "#ffffff", glyph: "3", layout: 1}
+- id: chuoi-7-ngay
+  name: Chuỗi 7 ngày
+  desc: Học 7 ngày liên tiếp.
+  group: Thói quen
+  tier: Bạc
+  rule: {streak: 7}
+  points: 35
+  art: {bg: "#1bbe72", a: "#272d2b", b: "#8cffcc", c: "#ffffff", glyph: "7", layout: 1}
+- id: chuoi-30-ngay
+  name: Chuỗi 30 ngày
+  desc: Học 30 ngày liên tiếp.
+  group: Thói quen
+  tier: Vàng
+  rule: {streak: 30}
+  points: 150
+  art: {bg: "#272d2b", a: "#2ad03d", b: "#1bbe72", c: "#8cffcc", glyph: "30", layout: 1}
+- id: nha-suu-tam-thuat-ngu
+  name: Nhà sưu tầm thuật ngữ
+  desc: Tra cứu 20 thuật ngữ khác nhau.
+  group: Khám phá
+  rule: {terms: 20}
+  points: 20
+  art: {bg: "#ffffff", a: "#1d4130", b: "#8cffcc", c: "#2ad03d", glyph: "Aa", layout: 2}
+- id: nha-thuc-hanh
+  name: Nhà thực hành
+  desc: Dùng đủ 3 phần tương tác trong một bài viết (sơ đồ, mô phỏng, bài tập).
+  group: Khám phá
+  rule: {explore: 3}
+  points: 15
+  art: {bg: "#1d4130", a: "#8cffcc", b: "#2ad03d", c: "#272d2b", glyph: "↔", layout: 3}
+- id: cu-dem
+  name: Cú đêm
+  desc: Hoàn thành một bài viết sau 23 giờ.
+  group: Bất ngờ
+  hidden: true
+  rule: {night_owl: true}
+  points: 10
+  art: {bg: "#272d2b", a: "#1d4130", b: "#8cffcc", c: "#2ad03d", glyph: "23h", layout: 4}

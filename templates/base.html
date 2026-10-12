@@ -11,6 +11,7 @@
 <meta property="og:description" content="{{ description }}">
 <meta property="og:url" content="{{ site_url }}{{ canonical }}">
 <meta property="og:locale" content="vi_VN">
+{% block og_image %}{% endblock %}
 <meta name="theme-color" content="#272d2b">
 <link rel="icon" href="{{ base }}/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,6 +62,7 @@
     <nav aria-label="Liên kết cuối trang" class="footer-nav">
       <a href="{{ base }}/#khoa-hoc">Khoá học</a>
       <a href="{{ base }}/thuat-ngu/">Thuật ngữ</a>
+      <a href="{{ base }}/huy-hieu/">Huy hiệu</a>
       <a href="{{ base }}/quyen-loi/">Quyền lợi tài khoản</a>
     </nav>
     <p class="disclaimer">{{ site.disclaimer }}</p>
@@ -81,6 +83,27 @@
   </div>
 </aside>
 <div class="toast" role="status" aria-live="polite" data-toast hidden></div>
+
+<div class="modal" data-badge-modal hidden>
+  <div class="modal-box badge-modal" role="dialog" aria-modal="true" aria-labelledby="badge-modal-title">
+    <p class="eyebrow" data-bm-kicker>Huy hiệu mới</p>
+    <img class="badge-art badge-art-lg" src="" alt="" width="160" height="160" data-bm-img>
+    <h2 id="badge-modal-title" data-bm-name></h2>
+    <p data-bm-desc></p>
+    <p class="strong" data-bm-points></p>
+    <div data-show="member" hidden class="btn-col">
+      <a class="btn btn-primary btn-lg btn-block" href="#" data-bm-share>Chia sẻ huy hiệu</a>
+      <a class="btn btn-outline btn-block" href="{{ base }}/hoc-tap/#huy-hieu">Xem tất cả huy hiệu</a>
+    </div>
+    <div data-show="guest" class="btn-col">
+      <p class="small">Huy hiệu đang được giữ tạm trên trình duyệt này. Đăng nhập hoặc mở tài khoản để nhận và lưu lại.</p>
+      <a class="btn btn-primary btn-lg btn-block" href="{{ base }}/dang-nhap/" data-login-link>Đăng nhập để nhận</a>
+      <a class="btn btn-outline btn-block" href="{{ base }}/quyen-loi/#mo-tai-khoan">Mở tài khoản miễn phí</a>
+    </div>
+    <button type="button" class="modal-skip" data-bm-close>Để sau</button>
+  </div>
+</div>
+<script type="application/json" id="badge-data">{{ badges | json | safe }}</script>
 
 <script src="{{ base }}/js/app.js" defer></script>
 {% block scripts %}{% endblock %}

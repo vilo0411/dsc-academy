@@ -53,6 +53,94 @@ def link_terms(text, glossary_keys, missing):
     return TERM_RE.sub(repl, text)
 
 
+INK, WHITE = "#272d2b", "#ffffff"
+LAYOUTS = {
+    1: {"a": (60, 0, 60, 60), "b": (60, 60, 30, 30), "c": (90, 60, 30, 30), "g": (30, 90)},
+    2: {"a": (0, 0, 120, 40), "b": (80, 40, 40, 40), "c": (80, 80, 40, 40), "g": (40, 82)},
+    3: {"a": (0, 0, 40, 120), "b": (80, 0, 40, 40), "c": (40, 0, 40, 40), "g": (80, 84)},
+    4: {"a": (0, 80, 120, 40), "b": (0, 0, 40, 40), "c": (80, 0, 40, 40), "g": (60, 60)},
+}
+
+
+def _lum(hex_):
+    r, g, b = (int(hex_[i:i + 2], 16) / 255 for i in (1, 3, 5))
+    f = lambda c: c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+
+
+def glyph_color(bg):
+    return INK if _lum(bg) > 0.18 else WHITE
+
+
+def glyph_size(glyph):
+    return {1: 46, 2: 38}.get(len(glyph), 30)
+
+
+def badge_svg(art):
+    L = LAYOUTS[art.get("layout", 1)]
+    rects = "".join(
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{art[k]}"/>'
+        for k in ("a", "b", "c") for (x, y, w, h) in [L[k]]
+    )
+    gx, gy = L["g"]
+    g = art["glyph"]
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">'
+        f'<rect width="120" height="120" fill="{art["bg"]}"/>{rects}'
+        f'<text x="{gx}" y="{gy}" text-anchor="middle" dominant-baseline="central" '
+        f'font-family="Plus Jakarta Sans, DejaVu Sans, Arial, sans-serif" font-weight="700" '
+        f'font-size="{glyph_size(g)}" fill="{glyph_color(art["bg"])}">{g}</text>'
+        f'<rect x="1.5" y="1.5" width="117" height="117" fill="none" stroke="{INK}" stroke-width="3"/></svg>'
+    )
+
+
+def badge_og_png(badge, path):
+    from PIL import Image, ImageDraw, ImageFont
+    fonts = ROOT / "assets-build"
+    bold = lambda s: ImageFont.truetype(str(fonts / "DejaVuSans-Bold.ttf"), s)
+    reg = lambda s: ImageFont.truetype(str(fonts / "DejaVuSans.ttf"), s)
+    W, H = 1200, 630
+    im = Image.new("RGB", (W, H), WHITE)
+    d = ImageDraw.Draw(im)
+    art, L = badge["art"], LAYOUTS[badge["art"].get("layout", 1)]
+    s, ox, oy = 3.6, 96, 99
+    d.rectangle([ox, oy, ox + 120 * s, oy + 120 * s], fill=art["bg"])
+    for k in ("a", "b", "c"):
+        x, y, w, h = L[k]
+        d.rectangle([ox + x * s, oy + y * s, ox + (x + w) * s - 1, oy + (y + h) * s - 1], fill=art[k])
+    gx, gy = L["g"]
+    d.text((ox + gx * s, oy + gy * s), art["glyph"], font=bold(int(glyph_size(art["glyph"]) * s * 0.92)),
+           fill=glyph_color(art["bg"]), anchor="mm")
+    d.rectangle([ox, oy, ox + 120 * s, oy + 120 * s], outline=INK, width=8)
+    tx = 600
+    d.rectangle([0, H - 16, W, H], fill="#2ad03d")
+    d.text((tx, 150), "HUY HIỆU DSC ACADEMY", font=bold(26), fill="#1d4130")
+    name, y = badge["name"], 200
+    for line in _wrap(d, name, bold(64), W - tx - 64):
+        d.text((tx, y), line, font=bold(64), fill=INK)
+        y += 76
+    y += 16
+    for line in _wrap(d, badge["desc"], reg(30), W - tx - 64):
+        d.text((tx, y), line, font=reg(30), fill=INK)
+        y += 42
+    d.text((tx, H - 90), "Học đầu tư bài bản cùng DSC Academy", font=reg(24), fill="#1d4130")
+    im.save(path, optimize=True)
+
+
+def _wrap(d, text, font, width):
+    words, lines, cur = text.split(), [], ""
+    for w in words:
+        t = (cur + " " + w).strip()
+        if d.textlength(t, font=font) <= width:
+            cur = t
+        else:
+            lines.append(cur)
+            cur = w
+    if cur:
+        lines.append(cur)
+    return lines
+
+
 def check_question(q, where):
     opts = q.get("options")
     if not isinstance(opts, list) or len(opts) < 2:
@@ -83,10 +171,21 @@ def main():
     if DIST.exists():
         shutil.rmtree(DIST)
     shutil.copytree(ROOT / "static", DIST)
+    DIST.mkdir(exist_ok=True)
 
     site = yaml.safe_load((CONTENT / "site.yaml").read_text(encoding="utf-8"))
     modules = yaml.safe_load((CONTENT / "modules.yaml").read_text(encoding="utf-8"))
     glossary = yaml.safe_load((CONTENT / "glossary.yaml").read_text(encoding="utf-8"))
+    badges = yaml.safe_load((CONTENT / "badges.yaml").read_text(encoding="utf-8"))
+    (DIST / "img" / "badges").mkdir(parents=True, exist_ok=True)
+    for b in badges:
+        b["img"] = f"{BASE}/img/badges/{b['id']}.svg"
+        b["og"] = f"{BASE}/img/badges/{b['id']}-og.png"
+        b["url"] = f"{BASE}/huy-hieu/{b['id']}/"
+        (DIST / "img" / "badges" / f"{b['id']}.svg").write_text(badge_svg(b["art"]), encoding="utf-8")
+        badge_og_png(b, DIST / "img" / "badges" / f"{b['id']}-og.png")
+    badges_public = [{k: b.get(k) for k in ("id", "name", "desc", "group", "tier", "rule", "points", "hidden", "img", "url")} for b in badges]
+
     for g in glossary:
         g["key"] = slugify(g["term"])
     glossary.sort(key=lambda g: slugify(g["term"]))
@@ -101,7 +200,7 @@ def main():
     )
     env.globals.update(
         base=BASE, site=site, site_url=SITE_URL, tier_label=TIER_LABEL,
-        level_label=LEVEL_LABEL, year=date.today().year,
+        level_label=LEVEL_LABEL, year=date.today().year, badges=badges_public,
     )
     env.filters["json"] = lambda v: json.dumps(v, ensure_ascii=False).replace("</", "<\\/")
     env.filters["slug"] = slugify
@@ -150,6 +249,11 @@ def main():
             for i, q in enumerate(mod["exam"]["questions"]):
                 check_question(q, f"exam {mod['slug']} q{i + 1}")
 
+    totals = {m["slug"]: len(m["articles"]) for m in modules}
+    for b in badges_public:
+        if "module" in b["rule"]:
+            b["total"] = totals.get(b["rule"]["module"], 0)
+
     for mod in modules:
         arts = mod["articles"]
         if not arts:
@@ -176,6 +280,10 @@ def main():
     out("dang-nhap", "login.html", title="Đăng nhập", description="Đăng nhập DSC Academy")
     out("hoc-tap", "learning.html", title="Học tập của tôi", description="Tiến độ học tập", modules=[m for m in modules if m["articles"]])
     out("quyen-loi", "access.html", title="Quyền lợi theo tài khoản", description="Nội dung miễn phí và nội dung dành cho khách hàng DSC", modules=modules)
+
+    for b in badges:
+        out(f"huy-hieu/{b['id']}", "badge.html", title=f"Huy hiệu {b['name']}", description=b["desc"], b=b)
+    out("huy-hieu", "badges.html", title="Huy hiệu", description="Các huy hiệu bạn có thể đạt khi học trên DSC Academy.", all_badges=badges)
 
     # glossary data for popovers
     (DIST / "data").mkdir(exist_ok=True)
