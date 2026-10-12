@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% set nav = 'courses' %}
+{% block og_type %}article{% endblock %}
+{% block body_attrs %}data-module="{{ mod.slug }}" data-article="{{ a.slug }}" data-tier-required="{{ a.tier }}"{% endblock %}
+{% block head %}
+<script type="application/ld+json">{{ {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": a.title,
+  "description": a.description,
+  "inLanguage": "vi",
+  "dateModified": a.updated | string,
+  "author": {"@type": "Organization", "name": site.author},
+  "isAccessibleForFree": a.tier == 'free',
+  "hasPart": ({"@type": "WebPageElement", "isAccessibleForFree": false, "cssSelector": ".article-body"} if a.tier != 'free' else none),
+  "isPartOf": {"@type": "Course", "name": mod.title}
+} | json | safe }}</script>
+{% endblock %}
+{% block main %}
+<script type="application/json" id="module-data">{{ {"slug": mod.slug, "articles": lite} | json | safe }}</script>
+<script type="application/json" id="quiz-data">{{ {"slug": a.slug, "answers": a.quiz | map(attribute='answer') | list, "explains": a.quiz | map(attribute='explain') | list} | json | safe }}</script>
+<div class="reading-bar" aria-hidden="true"><span data-reading-fill></span></div>
+
+<div class="wrap article-layout">
+  <nav class="chapter-nav" aria-label="Các bài viết trong khoá học">
+    <div class="cn-head">
+      <a class="cn-title" href="{{ mod.url }}">{{ mod.title }}</a>
+      <div data-show="member" hidden>
+        <div class="cn-progress"><span><span data-done-count>0</span> / {{ mod.articles | length }} Đã đọc</span><strong data-done-pct>0%</strong></div>
+        <div class="bar bar-thin" role="progressbar" aria-label="Tiến độ khoá học" aria-valuemin="0" aria-valuemax="{{ mod.articles | length }}" aria-valuenow="0" data-progressbar><span data-progress-fill></span></div>
+      </div>
+      <p class="cn-guest" data-show="guest"><a href="{{ base }}/dang-nhap/" data-login-link>Đăng nhập</a> để lưu tiến độ và tính hoàn thành bài viết.</p>
+    </div>
+    <ol class="cn-list">
+      {% for x in mod.articles %}
+      <li class="cn-item{% if x.slug == a.slug %} is-current{% endif %}" data-slug="{{ x.slug }}" data-tier="{{ x.tier }}">
+        <a href="{{ x.url }}" {% if x.slug == a.slug %}aria-current="page"{% endif %}>
+          <span class="dot" aria-hidden="true"></span>
+          <span class="lock-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+          <span class="cn-text"><span class="cn-num">{{ x.num }}.<span class="sr-only" data-row-state></span></span><span class="cn-name">{{ x.title }}</span>
+          {% if x.tier != 'free' %}<span class="tag tag-outline tag-sm" data-lock-tag>{{ tier_label[x.tier] }}</span>{% endif %}</span>
+        </a>
+        {% if x.slug == a.slug and a.toc %}
+        <div class="cn-toc">
+          <p class="cn-toc-title">Mục lục</p>
+          <ul>
+            {% for t in a.toc %}<li><a href="#{{ t.id }}" data-toc-link>{{ t.name }}</a></li>{% endfor %}
+            {% if a.quiz %}<li><a href="#quiz" data-toc-link>Quiz cuối bài</a></li>{% endif %}
+          </ul>
+        </div>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ol>
+  </nav>
+
+  <article class="article">
+    <nav aria-label="Breadcrumb" class="crumbs">
+      <a href="{{ base }}/">Academy</a><span aria-hidden="true">/</span><a href="{{ mod.url }}">{{ mod.title }}</a>
+    </nav>
+    <p class="kicker">Bài {{ a.num }} / {{ mod.articles | length }} · ~{{ a.minutes }} phút đọc{% if a.tier != 'free' %} · <span class="tag tag-outline tag-sm">{{ tier_label[a.tier] }}</span>{% endif %}</p>
+    <h1>{{ a.title }}</h1>
+    <p class="byline">{{ site.author }} · Cập nhật {{ a.updated.strftime('%d/%m/%Y') if a.updated.strftime is defined else a.updated }}</p>
+
+    {% if a.takeaways %}
+    <section class="takeaways" aria-label="Điểm chính">
+      <h2>Điểm chính</h2>
+      <ul>{% for t in a.takeaways %}<li>{{ t }}</li>{% endfor %}</ul>
+    </section>
+    {% endif %}
+
+    <div class="article-body prose" data-article-body>
+      {{ a.html | safe }}
+    </div>
+
+    <section class="paywall" aria-label="Mở khoá bài viết" data-paywall hidden>
+      <div class="pw-main">
+        <p class="pw-kicker">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+          {{ 'Dành cho khách hàng đã eKYC' if a.tier == 'ekyc' else 'Dành cho khách hàng DSC' }}
+        </p>
+        <h2 data-pw-title>Mở tài khoản DSC để đọc tiếp bài viết này</h2>
+        <ol class="pw-steps" data-pw-steps></ol>
+        <ul class="checks checks-sm">
+          {% if a.tier == 'ekyc' %}
+          <li>Toàn bộ bài viết nâng cao của mọi khoá học</li><li>Dữ liệu vĩ mô và thị trường cập nhật hằng ngày</li><li>Bài thi cuối khoá và chứng chỉ DSC Academy</li><li>Lưu tiến độ trên web và app</li>
+          {% else %}
+          <li>Đọc trọn bài viết này và các bài trung cấp</li><li>Lưu tiến độ, tính hoàn thành khi làm đúng quiz</li><li>Tải khoá học dạng PDF</li><li>Đồng bộ giữa web và app DSC</li>
+          {% endif %}
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary btn-lg" href="{{ base }}/quyen-loi/#mo-tai-khoan" data-pw-cta>Mở tài khoản</a>
+          <span class="small" data-show="guest">Đã có tài khoản? <a class="strong" href="{{ base }}/dang-nhap/" data-login-link>Đăng nhập</a></span>
+        </div>
+        <p class="muted xsmall">Mở tài khoản không mất phí. Sau khi hoàn tất, bạn quay lại đúng bài viết này.</p>
+      </div>
+      <div class="pw-side">
+        <strong>Hoặc làm trên app DSC</strong>
+        <img src="{{ base }}/img/qr-demo.svg" alt="Mã QR demo mở app DSC" width="140" height="140">
+        <span class="xsmall">Quét bằng điện thoại để mở app.</span>
+      </div>
+    </section>
+
+    {% if a.quiz %}
+    <section id="quiz" class="quiz" aria-labelledby="quiz-title" data-quiz>
+      <p class="eyebrow">Quiz cuối bài</p>
+      <h2 id="quiz-title">Kiểm tra để hoàn thành bài viết</h2>
+      <p>Trả lời đúng cả {{ a.quiz | length }} câu rồi chuyển sang bài tiếp theo để bài này được tính là đã đọc.</p>
+      <ol class="quiz-list">
+        {% for q in a.quiz %}
+        {% set qi = loop.index0 %}
+        <li class="quiz-q" data-q="{{ qi }}">
+          <p class="quiz-text"><span class="muted">Câu {{ loop.index }}.</span> {{ q.q }}</p>
+          <div class="quiz-opts" role="radiogroup" aria-label="Câu {{ loop.index }}">
+            {% for o in q.options %}
+            <button type="button" role="radio" aria-checked="false" class="quiz-opt" data-opt="{{ loop.index0 }}">{{ o }}</button>
+            {% endfor %}
+          </div>
+          <p class="quiz-fb" aria-live="polite" hidden></p>
+        </li>
+        {% endfor %}
+      </ol>
+      <div class="quiz-bar" data-quiz-bar>
+        <strong data-quiz-score>0/{{ a.quiz | length }} câu đúng</strong>
+        <span data-quiz-msg>Trả lời đúng tất cả để hoàn thành bài viết.</span>
+      </div>
+    </section>
+    {% endif %}
+
+    <div class="feedback">
+      <span class="strong">Bài viết này có hữu ích với bạn?</span>
+      <button type="button" class="btn btn-outline btn-sm" data-feedback>Có</button>
+      <button type="button" class="btn btn-outline btn-sm" data-feedback>Chưa</button>
+    </div>
+
+    <nav class="pager" aria-label="Chuyển bài viết">
+      {% if prev %}
+      <a class="pager-prev" href="{{ prev.url }}"><span class="small muted">Bài trước · {{ prev.num }}</span><span class="pager-title">{{ prev.title }}</span></a>
+      {% else %}<span></span>{% endif %}
+      {% if next %}
+      <a class="pager-next" href="{{ next.url }}" data-next-link><span class="small" data-next-kicker>Bài tiếp · {{ next.num }}</span><span class="pager-title">{{ next.title }}</span></a>
+      {% elif mod.exam %}
+      <a class="pager-next" href="{{ mod.exam_url }}" data-next-link><span class="small" data-next-kicker>Tiếp theo</span><span class="pager-title">Bài thi cuối khoá</span></a>
+      {% endif %}
+    </nav>
+    <p class="muted small right" data-next-note hidden>Chưa trả lời đúng hết quiz: chuyển bài sẽ không tính hoàn thành.</p>
+  </article>
+</div>
+
+<div class="modal" data-modal hidden>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="save-title">
+    <span class="modal-icon" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+    <h2 id="save-title">Bạn đã trả lời đúng hết!</h2>
+    <p>Đăng nhập hoặc mở tài khoản DSC miễn phí để lưu bài viết này là đã hoàn thành, theo dõi tiến độ và nhận chứng chỉ khi xong khoá học.</p>
+    <a class="btn btn-primary btn-lg btn-block" href="{{ base }}/quyen-loi/#mo-tai-khoan">Mở tài khoản miễn phí</a>
+    <a class="btn btn-outline btn-block" href="{{ base }}/dang-nhap/" data-login-link>Đăng nhập bằng tài khoản giao dịch</a>
+    <a class="modal-skip" href="{% if next %}{{ next.url }}{% elif mod.exam %}{{ mod.exam_url }}{% else %}{{ mod.url }}{% endif %}">Để sau, đọc tiếp (không lưu tiến độ)</a>
+  </div>
+</div>
+{% endblock %}

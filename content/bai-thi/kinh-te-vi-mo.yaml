@@ -1,0 +1,83 @@
+minutes: 25
+pass_pct: 70
+questions:
+  - q: Chỉ số nào phản ánh tổng giá trị hàng hoá, dịch vụ cuối cùng tạo ra trong nền kinh tế?
+    options: ["CPI", "GDP", "PMI", "Cán cân thương mại"]
+    answer: 1
+    topic: GDP và chu kỳ
+  - q: Tốc độ tăng trưởng kinh tế được báo cáo thường dùng loại GDP nào?
+    options: ["GDP danh nghĩa", "GDP thực", "GDP bình quân đầu người", "GDP theo USD"]
+    answer: 1
+    topic: GDP và chu kỳ
+  - q: Vì sao thị trường chứng khoán thường đi trước nền kinh tế?
+    options: ["Giá cổ phiếu phản ánh kỳ vọng về lợi nhuận tương lai", "Số liệu GDP được công bố trước", "Cổ phiếu chỉ phản ánh quá khứ", "Do quy định của sở giao dịch"]
+    answer: 0
+    topic: GDP và chu kỳ
+  - q: Ở giai đoạn suy thoái của chu kỳ, nhóm ngành nào thường chống chịu tốt hơn?
+    options: ["Bất động sản", "Chứng khoán", "Điện, nước, hàng tiêu dùng thiết yếu", "Vật liệu xây dựng"]
+    answer: 2
+    topic: GDP và chu kỳ
+  - q: CPI tăng cao kéo dài thường khiến ngân hàng trung ương làm gì?
+    options: ["Thắt chặt chính sách tiền tệ", "Nới lỏng tiền tệ", "Tăng chi tiêu công", "Giảm thuế"]
+    answer: 0
+    topic: Lạm phát, lãi suất
+  - q: Lạm phát lõi khác CPI chung ở điểm nào?
+    options: ["Chỉ tính hàng nhập khẩu", "Loại trừ các mặt hàng biến động mạnh như lương thực tươi sống, năng lượng", "Tính theo USD", "Chỉ tính dịch vụ"]
+    answer: 1
+    topic: Lạm phát, lãi suất
+  - q: Khi NHNN tăng lãi suất điều hành, nhóm ngành nào thường chịu áp lực rõ nhất?
+    options: ["Bảo hiểm", "Bất động sản", "Doanh nghiệp nhiều tiền mặt ròng", "Không ngành nào"]
+    answer: 1
+    topic: Lạm phát, lãi suất
+  - q: Công cụ nào NHNN dùng để điều tiết thanh khoản hệ thống gần như hằng ngày?
+    options: ["Dự trữ bắt buộc", "Nghiệp vụ thị trường mở (OMO)", "Trần lãi suất huy động", "Chỉ tiêu tín dụng"]
+    answer: 1
+    topic: Tiền tệ, tín dụng
+  - q: Cung tiền M2 bao gồm những gì?
+    options: ["Chỉ tiền mặt", "Tiền mặt lưu thông và tiền gửi tại ngân hàng", "Dự trữ ngoại hối", "Trái phiếu chính phủ"]
+    answer: 1
+    topic: Tiền tệ, tín dụng
+  - q: Nhóm cổ phiếu nào nhạy trực tiếp nhất với chỉ tiêu tăng trưởng tín dụng?
+    options: ["Ngân hàng", "Dược phẩm", "Điện", "Phần mềm"]
+    answer: 0
+    topic: Tiền tệ, tín dụng
+  - q: Tỷ giá trung tâm USD/VND tăng có nghĩa là gì?
+    options: ["VND mạnh lên", "VND mất giá so với USD", "Lãi suất VND giảm", "Xuất khẩu giảm"]
+    answer: 1
+    topic: Tỷ giá, dòng vốn
+  - q: Doanh nghiệp nào thường bất lợi khi VND mất giá?
+    options: ["Xuất khẩu thuỷ sản", "Có nhiều nợ vay bằng USD", "Dệt may xuất khẩu", "Đồ gỗ xuất khẩu"]
+    answer: 1
+    topic: Tỷ giá, dòng vốn
+  - q: Chỉ số FDI nào phản ánh tiền thực sự vào nền kinh tế?
+    options: ["FDI đăng ký", "FDI giải ngân", "Số dự án mới", "Số nhà đầu tư"]
+    answer: 1
+    topic: Tỷ giá, dòng vốn
+  - q: Đầu tư công tăng mạnh hưởng lợi trực tiếp cho nhóm nào?
+    options: ["Xây dựng hạ tầng và vật liệu", "Bảo hiểm nhân thọ", "Ngân hàng số", "Hàng không"]
+    answer: 0
+    topic: Tỷ giá, dòng vốn
+  - q: PMI ở mức 48 cho biết điều gì?
+    options: ["Sản xuất mở rộng", "Sản xuất thu hẹp so với tháng trước", "GDP giảm 2%", "Lạm phát 4,8%"]
+    answer: 1
+    topic: Chỉ báo, trái phiếu
+  - q: Chỉ số nào sau đây là chỉ báo trễ?
+    options: ["PMI", "Đơn hàng mới", "Tỷ lệ thất nghiệp", "Cấp phép xây dựng"]
+    answer: 2
+    topic: Chỉ báo, trái phiếu
+  - q: Khi giá trái phiếu giảm, lợi suất thế nào?
+    options: ["Tăng", "Giảm", "Không đổi", "Bằng 0"]
+    answer: 0
+    topic: Chỉ báo, trái phiếu
+  - q: Đường cong lợi suất đảo ngược thường được hiểu là tín hiệu gì?
+    options: ["Kinh tế tăng trưởng nóng", "Lo ngại suy thoái", "Lạm phát chắc chắn tăng", "Tỷ giá ổn định"]
+    answer: 1
+    topic: Chỉ báo, trái phiếu
+  - q: Khi Fed tăng lãi suất mạnh, điều gì thường xảy ra với thị trường mới nổi?
+    options: ["Dòng vốn rút ra, nội tệ chịu áp lực", "Dòng vốn đổ vào mạnh", "Không có tác động", "Lãi suất trong nước chắc chắn giảm"]
+    answer: 0
+    topic: Thế giới
+  - q: Giá dầu thế giới tăng mạnh thường bất lợi cho ngành nào?
+    options: ["Khai thác dầu khí", "Hàng không", "Dịch vụ kỹ thuật dầu khí", "Lọc hoá dầu có giá bán theo thế giới"]
+    answer: 1
+    topic: Thế giới

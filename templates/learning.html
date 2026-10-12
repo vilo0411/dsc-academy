@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% set nav = 'learning' %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block body_attrs %}data-page="learning"{% endblock %}
+{% block main %}
+<script type="application/json" id="learning-data">{{ modules | map(attribute='slug') | list | json | safe }}</script>
+{% for m in modules %}
+<script type="application/json" data-module-json>{{ {"slug": m.slug, "title": m.title, "num": m.num, "url": m.url, "exam": m.exam_url,
+  "articles": m.articles | map(attribute='slug') | list, "titles": m.articles | map(attribute='title') | list,
+  "urls": m.articles | map(attribute='url') | list} | json | safe }}</script>
+{% endfor %}
+<div class="wrap section section-last">
+  <div data-show="guest">
+    <h1>Học tập của tôi</h1>
+    <div class="card card-mint narrow">
+      <p>Đăng nhập để lưu tiến độ, xem các khoá học đang học và chứng chỉ của bạn.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="{{ base }}/dang-nhap/" data-login-link>Đăng nhập</a>
+        <a class="btn btn-outline" href="{{ base }}/quyen-loi/#mo-tai-khoan">Mở tài khoản</a>
+      </div>
+    </div>
+  </div>
+  <div data-show="member" hidden>
+    <h1>Chào <span data-user-name></span></h1>
+    <div class="learn-top">
+      <a class="continue-card" href="#" data-continue>
+        <span class="small mint">Tiếp tục học</span>
+        <span class="continue-title" data-continue-title></span>
+        <span class="continue-meta"><span class="bar bar-dark"><span data-continue-fill></span></span><span class="small" data-continue-count></span></span>
+        <span class="btn btn-primary">Đọc tiếp</span>
+      </a>
+      <dl class="stat-grid">
+        <div><dt>Bài viết đã đọc</dt><dd data-stat="read">0</dd></div>
+        <div><dt>Khoá học hoàn thành</dt><dd data-stat="mods">0</dd></div>
+        <div><dt>Quiz đúng hết</dt><dd data-stat="quiz">0</dd></div>
+        <div><dt>Chứng chỉ</dt><dd data-stat="certs">0</dd></div>
+      </dl>
+    </div>
+    <div class="two-col two-col-tight">
+      <section class="col-main">
+        <h2 class="list-head h3">Khoá học của tôi</h2>
+        <ul class="my-modules" data-my-modules></ul>
+      </section>
+      <aside class="col-side">
+        <section class="card">
+          <h2 class="h4">Chứng chỉ</h2>
+          <div data-certs><p class="small muted">Chưa có chứng chỉ. Hoàn thành bài thi cuối khoá để nhận.</p></div>
+        </section>
+      </aside>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="page-hero">
+  <div class="wrap">
+    <h1>Quyền lợi theo tài khoản</h1>
+    <p class="lead">Phần lớn nội dung DSC Academy miễn phí. Mở tài khoản và xác thực eKYC để mở khoá thêm bài viết chuyên sâu, dữ liệu và chứng chỉ.</p>
+  </div>
+</section>
+
+<div class="wrap section">
+  <div class="table-scroll">
+    <table class="tier-table">
+      <thead>
+        <tr>
+          <th scope="col"><span class="sr-only">Quyền lợi</span></th>
+          <th scope="col" class="t-free"><span class="xsmall">Tầng 1</span><span class="t-name">Khách</span><span class="xsmall">Chưa đăng nhập</span></th>
+          <th scope="col" class="t-acct"><span class="xsmall">Tầng 2</span><span class="t-name">Đã mở tài khoản</span><span class="xsmall">Chưa eKYC</span></th>
+          <th scope="col" class="t-ekyc"><span class="xsmall">Tầng 3</span><span class="t-name">Đã eKYC</span><span class="xsmall">Khách hàng đầy đủ</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in site.access_rows %}
+        <tr>
+          <th scope="row">{{ r.name }}</th>
+          {% for c in r.cells %}
+          <td class="{{ 'is-yes' if c.y else 'is-no' }}">
+            {% if c.y %}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            {% else %}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>{% endif %}
+            {{ c.t }}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<section class="wrap section">
+  <div class="section-head">
+    <h2>Bài viết nào miễn phí?</h2>
+    <ul class="legend legend-lg" aria-label="Chú thích">
+      <li><span class="lg lg-free"></span>Miễn phí</li><li><span class="lg lg-acct"></span>Cần mở tài khoản</li><li><span class="lg lg-ekyc"></span>Cần eKYC</li>
+    </ul>
+  </div>
+  <div class="two-col two-col-tight">
+    <ol class="col-side principles">
+      {% for p in site.principles %}<li>{{ p }}</li>{% endfor %}
+    </ol>
+    <ul class="col-main map-list">
+      {% for m in modules %}
+      <li>
+        <span class="map-name"><span class="muted strong">{{ m.num }}</span> {{ m.title }}</span>
+        <span class="map-cells" role="img" aria-label="{{ m.tiers | select('equalto','free') | list | length }} bài miễn phí, {{ m.tiers | select('equalto','acct') | list | length }} bài cần mở tài khoản, {{ m.tiers | select('equalto','ekyc') | list | length }} bài cần eKYC">
+          {% for t in m.tiers %}<span class="cell cell-{{ t }}"></span>{% endfor %}
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <p class="muted xsmall">Mỗi ô là một bài viết. Khoá học chưa ra mắt hiển thị phân tầng dự kiến.</p>
+</section>
+
+<section id="mo-tai-khoan" class="wrap section section-last">
+  <h2>Mở tài khoản và eKYC</h2>
+  <p class="muted narrow">Thực hiện qua luồng mở tài khoản của DSC trên web hoặc app, khoảng 3 phút với eKYC. Xong, bạn đăng nhập lại Academy bằng số tài khoản vừa nhận.</p>
+  <div class="open-grid">
+    <div class="card card-strong">
+      <h3 class="h4">Trên web</h3>
+      <p class="small">Điền thông tin, chụp CCCD và xác thực khuôn mặt bằng webcam hoặc camera điện thoại.</p>
+      <a class="btn btn-primary" href="{{ site.open_account_url }}" target="_blank" rel="noopener">Mở tài khoản trên web</a>
+    </div>
+    <div class="card card-dark open-app">
+      <div>
+        <h3 class="h4">Trên app DSC</h3>
+        <p class="small">Quét mã để tải app và mở tài khoản. Tiến độ học được đồng bộ khi đăng nhập.</p>
+      </div>
+      <img src="{{ base }}/img/qr-demo.svg" alt="Mã QR demo tải app DSC" width="132" height="132">
+    </div>
+  </div>
+</section>
+{% endblock %}

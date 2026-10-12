@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% set nav = 'courses' %}
+{% block body_attrs %}data-module="{{ mod.slug }}"{% endblock %}
+{% block main %}
+<script type="application/json" id="module-data">{{ {"slug": mod.slug, "articles": lite} | json | safe }}</script>
+<section class="module-hero">
+  <div class="wrap">
+    <nav aria-label="Breadcrumb" class="crumbs crumbs-light">
+      <a href="{{ base }}/">Academy</a><span aria-hidden="true">/</span><a href="{{ base }}/#khoa-hoc">Khoá học</a><span aria-hidden="true">/</span><span>{{ mod.title }}</span>
+    </nav>
+    <div class="module-hero-row">
+      <div class="module-hero-copy">
+        <span class="big-num">{{ mod.num }}</span>
+        <h1>{{ mod.title }}</h1>
+        <p class="lead">{{ mod.intro or mod.desc }}</p>
+      </div>
+      <div class="module-hero-side">
+        <dl class="stats stats-light">
+          <div><dt>Bài viết</dt><dd>{{ mod.articles | length }}</dd></div>
+          <div><dt>Thời lượng</dt><dd>~{{ (mod.minutes / 60) | round(1) | replace('.', ',') }} giờ</dd></div>
+          <div><dt>Trình độ</dt><dd>{{ level_label[mod.level] }}</dd></div>
+        </dl>
+        <a class="btn btn-primary btn-lg btn-block" href="{{ mod.articles[0].url }}" data-continue-link>Bắt đầu: Bài 01
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap two-col">
+  <div class="col-main">
+    {% if mod.outcomes %}
+    <h2 class="h3">Bạn sẽ học được</h2>
+    <ul class="checks">
+      {% for o in mod.outcomes %}<li>{{ o }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="list-head">
+      <h2 class="h3">Nội dung khoá học</h2>
+      <span class="muted small">{{ mod.articles | length }} bài viết</span>
+    </div>
+    <ol class="article-list">
+      {% for a in mod.articles %}
+      <li class="article-row" data-slug="{{ a.slug }}" data-tier="{{ a.tier }}">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="lock-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+        <span class="row-num">{{ a.num }}</span>
+        <a class="row-title" href="{{ a.url }}">{{ a.title }}<span class="sr-only" data-row-state></span></a>
+        {% if a.tier != 'free' %}<span class="tag tag-outline tag-sm" data-lock-tag>{{ tier_label[a.tier] }}</span>{% endif %}
+        <span class="muted small row-time">~{{ a.minutes }} phút</span>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+
+  <aside class="col-side">
+    <section class="card card-mint">
+      <h2 class="h4">Tiến độ của bạn</h2>
+      <div data-show="member" hidden>
+        <p class="small"><span data-done-count>0</span>/{{ mod.articles | length }} bài viết đã đọc</p>
+        <div class="bar" role="progressbar" aria-label="Tiến độ khoá học" aria-valuemin="0" aria-valuemax="{{ mod.articles | length }}" aria-valuenow="0" data-progressbar><span data-progress-fill></span></div>
+      </div>
+      <p class="small" data-show="guest"><a class="strong" href="{{ base }}/dang-nhap/" data-login-link>Đăng nhập</a> để lưu tiến độ và tính hoàn thành bài viết.</p>
+    </section>
+    {% if mod.exam %}
+    <section class="card">
+      <h2 class="h4">Bài thi cuối khoá</h2>
+      <p class="small">{{ mod.exam.questions | length }} câu · {{ mod.exam.minutes }} phút · Đạt từ {{ mod.exam.pass_pct }}% để nhận chứng chỉ.</p>
+      <a class="btn btn-outline btn-block" href="{{ mod.exam_url }}">Làm bài thi</a>
+      <p class="muted xsmall" data-show="not-ekyc">Chứng chỉ dành cho khách hàng đã eKYC.</p>
+    </section>
+    {% endif %}
+    <section class="card">
+      <h2 class="h4">Tải khoá học dạng PDF</h2>
+      <p class="small">Đọc offline toàn bộ {{ mod.articles | length }} bài viết.</p>
+      <button type="button" class="btn btn-outline btn-block" data-require="acct" data-pdf>Tải PDF</button>
+    </section>
+  </aside>
+</div>
+{% endblock %}

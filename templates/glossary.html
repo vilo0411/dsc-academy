@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% set nav = 'glossary' %}
+{% block head %}
+<script type="application/ld+json">{{ {
+  "@context": "https://schema.org", "@type": "DefinedTermSet", "name": "Thuật ngữ đầu tư — DSC Academy",
+  "hasDefinedTerm": glossary | map(attribute='term') | list
+} | json | safe }}</script>
+{% endblock %}
+{% block main %}
+<section class="page-hero">
+  <div class="wrap">
+    <h1>Thuật ngữ đầu tư</h1>
+    <p class="lead">Giải thích ngắn gọn các khái niệm tài chính, kèm ví dụ và bài viết liên quan.</p>
+    <label class="search-big">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <span class="sr-only">Tìm thuật ngữ</span>
+      <input type="search" placeholder="Tìm thuật ngữ, ví dụ: lạm phát, NIM…" data-gl-search autocomplete="off">
+    </label>
+  </div>
+</section>
+<div class="letter-bar">
+  <div class="wrap chips" role="group" aria-label="Lọc theo chữ cái" data-letters>
+    <button type="button" class="chip chip-ghost" aria-pressed="true" data-letter="all">Tất cả</button>
+    {% for l in glossary | map(attribute='term') | map('first') | map('upper') | unique %}
+    <button type="button" class="chip chip-ghost" aria-pressed="false" data-letter="{{ l }}">{{ l }}</button>
+    {% endfor %}
+  </div>
+</div>
+<div class="wrap section section-last">
+  <p class="muted small" data-gl-count>{{ glossary | length }} thuật ngữ</p>
+  <dl class="gl-list">
+    {% for g in glossary %}
+    <div class="gl-item" id="{{ g.key }}" data-letter="{{ g.term[0] | upper }}" data-search="{{ g.term }} {{ g.full or '' }} {{ g.def }}">
+      <dt>
+        <span class="gl-cat">{{ g.cat }}</span>
+        <span class="gl-term">{{ g.term }}</span>
+        {% if g.full %}<span class="muted small">{{ g.full }}</span>{% endif %}
+      </dt>
+      <dd>
+        <p>{{ g.def }}</p>
+        {% if g.example %}<p class="gl-example"><strong>Ví dụ:</strong> {{ g.example }}</p>{% endif %}
+        <p class="small gl-links">
+          {% if g.lesson %}<a href="{{ base }}{{ g.lesson.url }}">Học trong: {{ g.lesson.title }}</a>{% endif %}
+          {% for r in g.related or [] %}<a class="chip chip-sm" href="#{{ r | slug }}" data-related="{{ r | slug }}">{{ r }}</a>{% endfor %}
+        </p>
+      </dd>
+    </div>
+    {% endfor %}
+  </dl>
+  <p class="small" data-gl-empty hidden>Không tìm thấy thuật ngữ phù hợp. Thử từ khoá khác.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+name: DSC Academy
+tagline: Học đầu tư bài bản, từ nền tảng đến chiến lược. Các khoá học miễn phí về kinh tế vĩ mô, phân tích và quản trị rủi ro.
+author: Ban biên tập DSC Academy
+disclaimer: Nội dung DSC Academy chỉ nhằm mục đích giáo dục, không phải khuyến nghị đầu tư. Nhà đầu tư tự chịu trách nhiệm với quyết định của mình.
+# Link tới luồng mở tài khoản thật của DSC (thay khi có)
+open_account_url: "#"
+
+paths:
+  - level: basic
+    title: Nhà đầu tư mới
+    desc: Hiểu thị trường, nền kinh tế và các sản phẩm đầu tư trước khi xuống tiền.
+    modules: ["01", "02", "07"]
+  - level: mid
+    title: Phân tích và chọn cổ phiếu
+    desc: Tự phân tích doanh nghiệp, đọc biểu đồ và quản trị rủi ro cho danh mục.
+    modules: ["03", "04", "05", "06"]
+  - level: adv
+    title: Phái sinh và chiến lược
+    desc: Sử dụng đòn bẩy, phòng hộ và các công cụ phái sinh có kiểm soát.
+    modules: ["08", "09"]
+
+principles:
+  - "Khoá học cơ bản: gần như miễn phí toàn bộ, để kéo traffic tìm kiếm và tạo niềm tin."
+  - "Bài 1–2 của mọi khoá học: luôn miễn phí, để người đọc đọc thử trước."
+  - "Bài ứng dụng chuyên sâu cuối khoá và khoá trung cấp: cần mở tài khoản."
+  - "Khoá nâng cao (phái sinh, chứng quyền), dữ liệu thị trường, chứng chỉ: cần eKYC."
+
+access_rows:
+  - name: Bài viết, thuật ngữ, khoá học cơ bản
+    cells: [{y: true, t: "Đọc toàn bộ"}, {y: true, t: "Đọc toàn bộ"}, {y: true, t: "Đọc toàn bộ"}]
+  - name: Component tương tác trong bài
+    cells: [{y: true, t: "Dùng được"}, {y: true, t: "Dùng được"}, {y: true, t: "Dùng được"}]
+  - name: Quiz cuối bài
+    cells: [{y: true, t: "Làm được, không lưu"}, {y: true, t: "Lưu kết quả"}, {y: true, t: "Lưu kết quả"}]
+  - name: Lưu tiến độ, tính hoàn thành bài viết
+    cells: [{y: false, t: "Không"}, {y: true, t: "Có, đồng bộ web và app"}, {y: true, t: "Có, đồng bộ web và app"}]
+  - name: Bài viết và khoá học trung cấp
+    cells: [{y: false, t: "Xem đoạn mở đầu"}, {y: true, t: "Đọc toàn bộ"}, {y: true, t: "Đọc toàn bộ"}]
+  - name: Tải khoá học dạng PDF
+    cells: [{y: false, t: "Không"}, {y: true, t: "Có"}, {y: true, t: "Có"}]
+  - name: Bài viết và khoá học nâng cao
+    cells: [{y: false, t: "Xem đoạn mở đầu"}, {y: false, t: "Xem đoạn mở đầu"}, {y: true, t: "Đọc toàn bộ"}]
+  - name: Dữ liệu vĩ mô và thị trường hằng ngày
+    cells: [{y: false, t: "Bản xem trước làm mờ"}, {y: false, t: "Bản xem trước làm mờ"}, {y: true, t: "Đầy đủ"}]
+  - name: Bài thi cuối khoá, chứng chỉ
+    cells: [{y: false, t: "Làm thử, không cấp"}, {y: false, t: "Làm thử, không cấp"}, {y: true, t: "Có"}]

@@ -1,0 +1,165 @@
+# Thuật ngữ. Trong bài viết, gắn thuật ngữ bằng [[chữ hiển thị|Tên thuật ngữ]] hoặc [[Tên thuật ngữ]].
+- term: Cán cân thương mại
+  cat: Vĩ mô
+  def: Chênh lệch giữa giá trị xuất khẩu và nhập khẩu hàng hoá của một quốc gia trong một thời kỳ. Xuất nhiều hơn nhập là thặng dư, ngược lại là thâm hụt.
+  example: Cán cân thương mại thặng dư giúp tăng nguồn cung ngoại tệ, thường hỗ trợ ổn định tỷ giá.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/can-can-thuong-mai-fdi/, title: "Bài 07 · Cán cân thương mại, FDI và dòng vốn ngoại"}
+  related: [FDI, Tỷ giá trung tâm]
+- term: Chính sách tài khoá
+  cat: Vĩ mô
+  def: Cách Chính phủ dùng thu ngân sách (thuế, phí) và chi ngân sách (chi thường xuyên, đầu tư công) để điều tiết nền kinh tế.
+  example: Đẩy mạnh giải ngân đầu tư công là chính sách tài khoá mở rộng, thường có lợi cho nhóm xây dựng, vật liệu.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/chinh-sach-tai-khoa/, title: "Bài 08 · Chính sách tài khoá và đầu tư công"}
+  related: [Đầu tư công, Thâm hụt ngân sách]
+- term: Chu kỳ kinh tế
+  cat: Vĩ mô
+  def: Sự dao động lặp lại của hoạt động kinh tế qua các giai đoạn phục hồi, tăng trưởng, đỉnh và suy thoái.
+  example: Ở giai đoạn phục hồi, nhóm ngành chu kỳ như ngân hàng, chứng khoán, vật liệu thường dẫn dắt thị trường.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/gdp-va-chu-ky-kinh-te/, title: "Bài 02 · GDP và chu kỳ kinh tế"}
+  related: [GDP, PMI]
+- term: CPI
+  full: Chỉ số giá tiêu dùng
+  cat: Vĩ mô
+  def: Đo mức thay đổi giá của một giỏ hàng hoá, dịch vụ tiêu dùng tiêu biểu theo thời gian; là thước đo lạm phát phổ biến nhất.
+  example: CPI tháng này tăng so với cùng kỳ năm trước nghĩa là mặt bằng giá tiêu dùng đã cao hơn một năm trước.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/lam-phat-va-cpi/, title: "Bài 03 · Lạm phát và chỉ số CPI"}
+  related: [Lạm phát, Lãi suất điều hành]
+- term: Cung tiền M2
+  cat: Tiền tệ
+  def: Tổng lượng tiền trong nền kinh tế, gồm tiền mặt lưu thông, tiền gửi không kỳ hạn và tiền gửi có kỳ hạn tại ngân hàng.
+  example: Cung tiền M2 tăng nhanh hơn tăng trưởng kinh tế trong thời gian dài có thể tạo áp lực lạm phát.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/cung-tien-va-tin-dung/, title: "Bài 05 · Cung tiền và tăng trưởng tín dụng"}
+  related: [Tăng trưởng tín dụng, Lạm phát]
+- term: Dự trữ bắt buộc
+  cat: Tiền tệ
+  def: Tỷ lệ tiền gửi mà ngân hàng thương mại phải giữ lại tại ngân hàng trung ương, không được cho vay.
+  example: Tăng tỷ lệ dự trữ bắt buộc làm giảm lượng tiền ngân hàng có thể cho vay ra nền kinh tế.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/lai-suat-va-chinh-sach-tien-te/, title: "Bài 04 · Lãi suất và chính sách tiền tệ"}
+  related: [OMO, Lãi suất điều hành]
+- term: DXY
+  full: Chỉ số đồng USD (US Dollar Index)
+  cat: Thế giới
+  def: Chỉ số đo sức mạnh của đồng USD so với một rổ sáu đồng tiền chủ chốt, trong đó EUR chiếm tỷ trọng lớn nhất.
+  example: DXY tăng mạnh thường gây áp lực mất giá lên các đồng tiền mới nổi, trong đó có VND.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/kinh-te-the-gioi-va-viet-nam/, title: "Bài 11 · Kinh tế thế giới tác động đến Việt Nam"}
+  related: [Fed, Tỷ giá trung tâm]
+- term: Đầu tư công
+  cat: Vĩ mô
+  def: Việc Nhà nước dùng vốn ngân sách để đầu tư vào các dự án hạ tầng, công trình công cộng như đường cao tốc, sân bay, cảng biển.
+  example: Tốc độ giải ngân đầu tư công là chỉ báo được theo dõi sát với nhóm cổ phiếu xây dựng hạ tầng, thép, xi măng.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/chinh-sach-tai-khoa/, title: "Bài 08 · Chính sách tài khoá và đầu tư công"}
+  related: [Chính sách tài khoá]
+- term: Đường cong lợi suất
+  cat: Trái phiếu
+  def: Đồ thị biểu diễn lợi suất trái phiếu chính phủ theo các kỳ hạn khác nhau tại cùng một thời điểm.
+  example: Khi lợi suất kỳ hạn ngắn cao hơn kỳ hạn dài (đường cong đảo ngược), thị trường thường lo ngại suy thoái.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/loi-suat-trai-phieu-duong-cong/, title: "Bài 10 · Lợi suất trái phiếu và đường cong lợi suất"}
+  related: [Lợi suất trái phiếu]
+- term: FDI
+  full: Foreign Direct Investment
+  cat: Vĩ mô
+  def: Vốn đầu tư trực tiếp nước ngoài, khi nhà đầu tư nước ngoài bỏ vốn lập hoặc góp vốn vào cơ sở sản xuất kinh doanh tại Việt Nam và tham gia quản lý.
+  example: FDI giải ngân tăng giúp tăng cung ngoại tệ và hỗ trợ nhóm bất động sản khu công nghiệp.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/can-can-thuong-mai-fdi/, title: "Bài 07 · Cán cân thương mại, FDI và dòng vốn ngoại"}
+  related: [Cán cân thương mại]
+- term: Fed
+  full: Cục Dự trữ Liên bang Mỹ
+  cat: Thế giới
+  def: Ngân hàng trung ương của Mỹ, quyết định lãi suất chính sách của đồng USD. Quyết định của Fed ảnh hưởng đến dòng vốn và tỷ giá trên toàn cầu.
+  example: Khi Fed tăng lãi suất mạnh, USD thường mạnh lên và dòng vốn có xu hướng rút khỏi các thị trường mới nổi.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/kinh-te-the-gioi-va-viet-nam/, title: "Bài 11 · Kinh tế thế giới tác động đến Việt Nam"}
+  related: [DXY]
+- term: GDP
+  full: Gross Domestic Product
+  cat: Vĩ mô
+  def: Tổng giá trị hàng hoá và dịch vụ cuối cùng được tạo ra trong lãnh thổ một quốc gia trong một khoảng thời gian.
+  example: Tăng trưởng GDP thực phản ánh quy mô nền kinh tế mở rộng sau khi đã loại bỏ tác động của giá.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/gdp-va-chu-ky-kinh-te/, title: "Bài 02 · GDP và chu kỳ kinh tế"}
+  related: [Chu kỳ kinh tế, PMI]
+- term: Lạm phát
+  cat: Vĩ mô
+  def: Hiện tượng mặt bằng giá chung tăng lên liên tục, làm giảm sức mua của đồng tiền.
+  example: Với lạm phát 4% một năm, 100.000 đồng sau một năm chỉ mua được lượng hàng tương đương khoảng 96.000 đồng hôm nay.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/lam-phat-va-cpi/, title: "Bài 03 · Lạm phát và chỉ số CPI"}
+  related: [CPI, Lãi suất điều hành]
+- term: Lãi suất điều hành
+  cat: Tiền tệ
+  def: Các mức lãi suất do NHNN công bố (tái cấp vốn, tái chiết khấu, cho vay qua đêm…) để định hướng mặt bằng lãi suất thị trường.
+  example: NHNN hạ lãi suất điều hành để giảm chi phí vốn, hỗ trợ tăng trưởng.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/lai-suat-va-chinh-sach-tien-te/, title: "Bài 04 · Lãi suất và chính sách tiền tệ"}
+  related: [OMO, Lãi suất tái chiết khấu]
+- term: Lãi suất liên ngân hàng
+  cat: Tiền tệ
+  def: Lãi suất các ngân hàng cho nhau vay trên thị trường liên ngân hàng, phổ biến nhất là kỳ hạn qua đêm. Phản ánh mức dư thừa hay thiếu hụt thanh khoản của hệ thống.
+  example: Lãi suất liên ngân hàng qua đêm tăng vọt cho thấy hệ thống đang thiếu tiền ngắn hạn.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/lai-suat-va-chinh-sach-tien-te/, title: "Bài 04 · Lãi suất và chính sách tiền tệ"}
+  related: [OMO]
+- term: Lãi suất tái chiết khấu
+  cat: Tiền tệ
+  def: Lãi suất NHNN áp dụng khi chiết khấu lại giấy tờ có giá ngắn hạn cho ngân hàng thương mại; thường là mức sàn của hành lang lãi suất.
+  example: Cùng với lãi suất tái cấp vốn, lãi suất tái chiết khấu tạo thành hành lang định hướng lãi suất liên ngân hàng.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/lai-suat-va-chinh-sach-tien-te/, title: "Bài 04 · Lãi suất và chính sách tiền tệ"}
+  related: [Lãi suất điều hành]
+- term: Lợi suất trái phiếu
+  cat: Trái phiếu
+  def: Tỷ suất sinh lời nhà đầu tư nhận được nếu mua trái phiếu ở giá hiện tại và giữ đến đáo hạn. Giá trái phiếu và lợi suất biến động ngược chiều.
+  example: Lợi suất trái phiếu chính phủ kỳ hạn 10 năm thường được dùng làm lãi suất phi rủi ro khi định giá cổ phiếu.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/loi-suat-trai-phieu-duong-cong/, title: "Bài 10 · Lợi suất trái phiếu và đường cong lợi suất"}
+  related: [Đường cong lợi suất, Tỷ suất chiết khấu]
+- term: NIM
+  full: Net Interest Margin
+  cat: Ngân hàng
+  def: Biên lãi ròng, bằng chênh lệch giữa thu nhập lãi và chi phí lãi chia cho tài sản sinh lãi bình quân. Thước đo khả năng sinh lời từ hoạt động cho vay của ngân hàng.
+  example: Ngân hàng có NIM 4% thu về khoảng 4 đồng lãi ròng trên mỗi 100 đồng tài sản sinh lãi mỗi năm.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/lai-suat-va-chinh-sach-tien-te/, title: "Bài 04 · Lãi suất và chính sách tiền tệ"}
+  related: [Lãi suất điều hành]
+- term: OMO
+  full: Nghiệp vụ thị trường mở
+  cat: Tiền tệ
+  def: NHNN mua hoặc bán giấy tờ có giá với ngân hàng thương mại để bơm hoặc hút tiền, điều tiết thanh khoản hệ thống hằng ngày.
+  example: NHNN phát hành tín phiếu là đang hút tiền về, thường khi muốn hỗ trợ tỷ giá.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/lai-suat-va-chinh-sach-tien-te/, title: "Bài 04 · Lãi suất và chính sách tiền tệ"}
+  related: [Tín phiếu NHNN, Lãi suất liên ngân hàng]
+- term: P/E
+  full: Price to Earnings
+  cat: Định giá
+  def: Hệ số giá trên thu nhập, bằng giá cổ phiếu chia cho lợi nhuận sau thuế trên mỗi cổ phiếu (EPS).
+  example: Cổ phiếu giá 30.000 đồng, EPS 3.000 đồng thì P/E bằng 10 lần.
+  related: [Tỷ suất chiết khấu]
+- term: PMI
+  full: Purchasing Managers’ Index
+  cat: Vĩ mô
+  def: Chỉ số nhà quản trị mua hàng, khảo sát hoạt động ngành sản xuất. Trên 50 là mở rộng, dưới 50 là thu hẹp so với tháng trước.
+  example: PMI lên 52 cho thấy ngành sản xuất đang mở rộng so với tháng trước.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/pmi-va-chi-bao-som/, title: "Bài 09 · PMI và các chỉ báo sớm"}
+  related: [GDP, Chu kỳ kinh tế]
+- term: Tăng trưởng tín dụng
+  cat: Tiền tệ
+  def: Tốc độ tăng dư nợ cho vay của toàn hệ thống ngân hàng so với cuối năm trước hoặc cùng kỳ.
+  example: Tín dụng tăng chậm thường cho thấy nhu cầu vay yếu hoặc điều kiện cho vay thắt chặt.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/cung-tien-va-tin-dung/, title: "Bài 05 · Cung tiền và tăng trưởng tín dụng"}
+  related: [Cung tiền M2]
+- term: Thâm hụt ngân sách
+  cat: Vĩ mô
+  def: Tình trạng tổng chi ngân sách nhà nước lớn hơn tổng thu trong một năm, phải bù đắp bằng vay nợ.
+  example: Thâm hụt ngân sách lớn có thể khiến Chính phủ phát hành nhiều trái phiếu hơn, gây áp lực lên lợi suất.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/chinh-sach-tai-khoa/, title: "Bài 08 · Chính sách tài khoá và đầu tư công"}
+  related: [Chính sách tài khoá, Lợi suất trái phiếu]
+- term: Tín phiếu NHNN
+  cat: Tiền tệ
+  def: Giấy tờ có giá ngắn hạn do NHNN phát hành để hút bớt tiền đồng khỏi hệ thống ngân hàng.
+  example: Khi tỷ giá chịu áp lực, NHNN có thể phát hành tín phiếu để giảm thanh khoản VND dư thừa.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/ty-gia-va-ngoai-hoi/, title: "Bài 06 · Tỷ giá và thị trường ngoại hối"}
+  related: [OMO, Tỷ giá trung tâm]
+- term: Tỷ giá trung tâm
+  cat: Tiền tệ
+  def: Tỷ giá VND/USD do NHNN công bố hằng ngày, làm căn cứ để ngân hàng thương mại xác định biên độ giao dịch.
+  example: Tỷ giá trung tâm tăng nghĩa là VND mất giá so với USD.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/ty-gia-va-ngoai-hoi/, title: "Bài 06 · Tỷ giá và thị trường ngoại hối"}
+  related: [DXY, Cán cân thương mại]
+- term: Tỷ suất chiết khấu
+  cat: Định giá
+  def: Mức lợi nhuận nhà đầu tư đòi hỏi, dùng để quy dòng tiền tương lai về giá trị hôm nay. Lãi suất phi rủi ro là nền của tỷ suất này.
+  example: Tỷ suất chiết khấu tăng từ 10% lên 12% làm giá trị hiện tại của cùng một dòng tiền tương lai giảm xuống.
+  lesson: {url: /khoa-hoc/kinh-te-vi-mo/lai-suat-va-chinh-sach-tien-te/, title: "Bài 04 · Lãi suất và chính sách tiền tệ"}
+  related: [P/E, Lợi suất trái phiếu]

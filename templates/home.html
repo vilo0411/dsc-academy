@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% set nav = 'courses' %}
+{% block main %}
+<section class="hero">
+  <div class="wrap hero-row">
+    <div class="hero-copy">
+      <p class="eyebrow eyebrow-mint">{{ site.name }} · Miễn phí cho mọi nhà đầu tư</p>
+      <h1>Học đầu tư bài bản, từ nền tảng đến chiến lược.</h1>
+      <p class="lead">Mỗi khoá học là một chuỗi bài viết ngắn, đọc theo thứ tự hoặc chọn đúng chủ đề bạn cần. Có quiz cuối bài và bài thi lấy chứng chỉ.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary btn-lg" href="{{ base }}/khoa-hoc/kinh-te-vi-mo/">Bắt đầu với Kinh tế vĩ mô
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-outline-light btn-lg" href="#lo-trinh">Xem lộ trình học</a>
+      </div>
+    </div>
+    <div class="hero-blocks" aria-hidden="true">
+      <div class="b-lime b-2x2"></div><div class="b-emerald"></div><div class="b-mint"></div>
+      <div class="b-pine b-2x1"></div><div class="b-pine"></div><div class="b-mint"></div><div class="b-emerald b-2x1"></div>
+    </div>
+  </div>
+</section>
+
+<section id="lo-trinh" class="wrap section">
+  <div class="section-head">
+    <h2>Chọn lộ trình theo trình độ</h2>
+    <p class="muted">Mỗi lộ trình gồm các khoá học nối tiếp nhau. Bạn có thể bắt đầu ở bất kỳ khoá nào.</p>
+  </div>
+  <div class="paths">
+    {% for p in site.paths %}
+    <a class="path" href="#khoa-hoc" data-filter-link="{{ p.level }}">
+      <span class="path-level">{{ level_label[p.level] }}</span>
+      <span class="path-title">{{ p.title }}</span>
+      <span class="path-desc">{{ p.desc }}</span>
+      <span class="path-mods">Khoá {{ p.modules | join(' · ') }}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="khoa-hoc" class="wrap section">
+  <div class="section-head section-head-plain">
+    <h2>Tất cả khoá học</h2>
+    <div class="chips" role="group" aria-label="Lọc theo trình độ" data-filter-group>
+      <button type="button" class="chip" aria-pressed="true" data-filter="all">Tất cả</button>
+      <button type="button" class="chip" aria-pressed="false" data-filter="basic">Cơ bản</button>
+      <button type="button" class="chip" aria-pressed="false" data-filter="mid">Trung cấp</button>
+      <button type="button" class="chip" aria-pressed="false" data-filter="adv">Nâng cao</button>
+    </div>
+  </div>
+  <div class="module-grid">
+    {% for m in modules %}
+    {% if m.articles %}
+    <a class="module-card is-live" href="{{ m.url }}" data-level="{{ m.level }}">
+      <span class="module-top"><span class="module-num">{{ m.num }}</span><span class="tag tag-dark">Mới</span></span>
+      <span class="module-title">{{ m.title }}</span>
+      <span class="module-desc">{{ m.desc }}</span>
+      <span class="module-meta">{{ m.articles | length }} bài viết · {{ level_label[m.level] }} · <span data-module-progress="{{ m.slug }}" data-total="{{ m.articles | length }}"></span></span>
+    </a>
+    {% else %}
+    <div class="module-card is-soon" data-level="{{ m.level }}">
+      <span class="module-top"><span class="module-num">{{ m.num }}</span><span class="tag tag-outline">Sắp ra mắt</span></span>
+      <span class="module-title">{{ m.title }}</span>
+      <span class="module-desc">{{ m.desc }}</span>
+      <span class="module-meta">{{ level_label[m.level] }}</span>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+<section class="wrap section section-last">
+  <div class="section-head">
+    <h2>Bài viết mới cập nhật</h2>
+    <a href="#khoa-hoc" class="link-strong">Xem tất cả khoá học</a>
+  </div>
+  <div class="latest">
+    {% for a in latest %}
+    <a class="latest-item" href="{{ a.url }}">
+      <span class="muted small strong">{{ a.module.title }} · Bài {{ a.num }}</span>
+      <span class="latest-title">{{ a.title }}</span>
+      <span class="muted small">~{{ a.minutes }} phút đọc{% if a.tier != 'free' %} · {{ tier_label[a.tier] }}{% endif %}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

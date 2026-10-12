@@ -1,0 +1,61 @@
+# Danh sách khoá học. Khoá có thư mục content/khoa-hoc/<slug>/ sẽ được tạo trang;
+# khoá chưa có nội dung hiển thị "Sắp ra mắt". `map` = phân tầng dự kiến (f/a/e).
+- order: 1
+  slug: nhap-mon-chung-khoan
+  title: Nhập môn thị trường chứng khoán
+  desc: Thị trường vận hành thế nào, các chủ thể tham gia, mở tài khoản và đặt lệnh đầu tiên.
+  level: basic
+  map: ffffffffff
+- order: 2
+  slug: kinh-te-vi-mo
+  title: Kinh tế vĩ mô cho nhà đầu tư
+  desc: GDP, lạm phát, lãi suất, tỷ giá và cách các chỉ số này tác động đến thị trường chứng khoán.
+  intro: Thị trường chứng khoán phản ánh sức khoẻ nền kinh tế. Khoá học này giúp bạn đọc hiểu các chỉ số vĩ mô quan trọng và biết chúng ảnh hưởng thế nào đến từng nhóm ngành, từng quyết định đầu tư.
+  level: basic
+  outcomes:
+    - Đọc hiểu các chỉ số GDP, CPI, PMI và biết số liệu được công bố ở đâu, khi nào.
+    - Hiểu cách NHNN điều hành lãi suất, tỷ giá và tác động đến định giá cổ phiếu.
+    - Nhận diện giai đoạn của chu kỳ kinh tế và các nhóm ngành hưởng lợi theo từng giai đoạn.
+    - Đánh giá ảnh hưởng của Fed, đồng USD và giá hàng hoá thế giới lên thị trường Việt Nam.
+- order: 3
+  slug: phan-tich-co-ban
+  title: Phân tích cơ bản
+  desc: Đọc báo cáo tài chính, tính các chỉ số và định giá doanh nghiệp.
+  level: mid
+  map: ffffaaaaaa
+- order: 4
+  slug: phan-tich-ky-thuat
+  title: Phân tích kỹ thuật
+  desc: Biểu đồ, mô hình giá, chỉ báo và cách xác định điểm mua bán.
+  level: mid
+  map: ffffaaaaaa
+- order: 5
+  slug: quan-tri-rui-ro
+  title: Quản trị rủi ro và tâm lý giao dịch
+  desc: Quản lý vốn, cắt lỗ và giữ kỷ luật khi thị trường biến động.
+  level: mid
+  map: ffaaaaaaaa
+- order: 6
+  slug: trai-phieu
+  title: Trái phiếu
+  desc: Lợi suất, kỳ hạn, xếp hạng tín nhiệm và rủi ro khi đầu tư trái phiếu.
+  level: mid
+  map: ffffffaaaa
+- order: 7
+  slug: quy-dau-tu-etf
+  title: Quỹ đầu tư và ETF
+  desc: Chọn quỹ, đọc bản cáo bạch và xây danh mục dài hạn.
+  level: basic
+  map: ffffffffaa
+- order: 8
+  slug: chung-khoan-phai-sinh
+  title: Chứng khoán phái sinh
+  desc: Hợp đồng tương lai chỉ số, ký quỹ, đòn bẩy và phòng hộ.
+  level: adv
+  map: ffeeeeeeee
+- order: 9
+  slug: chung-quyen
+  title: Chứng quyền có bảo đảm
+  desc: Cơ chế, định giá và chiến lược giao dịch chứng quyền.
+  level: adv
+  map: ffeeeeeeee

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block main %}
+<div class="login-layout">
+  <section class="login-main">
+    <form class="login-form" data-login-form>
+      <div>
+        <h1>Đăng nhập</h1>
+        <p class="muted">Dùng tài khoản giao dịch DSC. Tiến độ học được đồng bộ giữa web và app.</p>
+      </div>
+      <label class="field">Số tài khoản
+        <input type="text" name="account" value="085C123456" autocomplete="username" required>
+      </label>
+      <label class="field">Mật khẩu
+        <span class="pw-wrap">
+          <input type="password" name="password" value="demo1234" autocomplete="current-password" required data-pw>
+          <button type="button" class="pw-toggle" aria-label="Hiện mật khẩu" data-pw-toggle>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </span>
+      </label>
+      <fieldset class="demo-fieldset">
+        <legend>Demo: trạng thái tài khoản</legend>
+        <label><input type="radio" name="tier" value="ekyc" checked> Đã eKYC (khách hàng đầy đủ)</label>
+        <label><input type="radio" name="tier" value="acct"> Đã mở tài khoản, chưa eKYC</label>
+      </fieldset>
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Đăng nhập</button>
+      <p class="center">Chưa có tài khoản? <a class="strong" href="{{ base }}/quyen-loi/#mo-tai-khoan">Mở tài khoản miễn phí</a></p>
+    </form>
+  </section>
+  <aside class="login-aside">
+    <div class="hero-blocks hero-blocks-sm" aria-hidden="true">
+      <div class="b-lime b-2x2"></div><div class="b-emerald"></div><div class="b-mint"></div>
+      <div class="b-pine b-2x1"></div><div class="b-pine"></div><div class="b-mint"></div><div class="b-emerald b-2x1"></div>
+    </div>
+    <div>
+      <p class="login-claim">Tiếp tục đúng bài viết bạn đang đọc.</p>
+      <ul class="checks checks-light">
+        <li>Lưu tiến độ, đồng bộ web và app</li>
+        <li>Mở khoá bài viết trung cấp và nâng cao</li>
+        <li>Thi cuối khoá và nhận chứng chỉ</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+{% endblock %}

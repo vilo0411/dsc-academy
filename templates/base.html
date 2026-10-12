@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% if title and title != site.name %}{{ title }} — {% endif %}{{ site.name }}</title>
+<meta name="description" content="{{ description }}">
+<link rel="canonical" href="{{ site_url }}{{ canonical }}">
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="{{ site_url }}{{ canonical }}">
+<meta property="og:locale" content="vi_VN">
+<meta name="theme-color" content="#272d2b">
+<link rel="icon" href="{{ base }}/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ base }}/css/style.css">
+{% block head %}{% endblock %}
+</head>
+<body data-base="{{ base }}" {% block body_attrs %}{% endblock %}>
+<a class="skip" href="#main">Bỏ qua đến nội dung</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="{{ base }}/">
+      <img src="{{ base }}/img/logo-green.png" alt="DSC" width="93" height="33">
+      <span>Academy</span>
+    </a>
+    <nav class="main-nav" aria-label="Điều hướng chính">
+      <a href="{{ base }}/#khoa-hoc" {% if nav == 'courses' %}aria-current="page"{% endif %}>Khoá học</a>
+      <a href="{{ base }}/#lo-trinh">Lộ trình</a>
+      <a href="{{ base }}/thuat-ngu/" {% if nav == 'glossary' %}aria-current="page"{% endif %}>Thuật ngữ</a>
+      <a href="{{ base }}/hoc-tap/" {% if nav == 'learning' %}aria-current="page"{% endif %}>Học tập của tôi</a>
+    </nav>
+    <div class="auth" data-show="guest">
+      <a class="btn btn-outline btn-sm" href="{{ base }}/dang-nhap/" data-login-link>Đăng nhập</a>
+      <a class="btn btn-primary btn-sm" href="{{ base }}/quyen-loi/#mo-tai-khoan">Mở tài khoản</a>
+    </div>
+    <div class="auth" data-show="member" hidden>
+      <span class="badge" data-tier-badge></span>
+      <a class="avatar-link" href="{{ base }}/hoc-tap/" aria-label="Học tập của tôi"><span class="avatar" data-user-initial>A</span><span class="user-name" data-user-name></span></a>
+      <button type="button" class="btn btn-ghost btn-sm" data-logout>Đăng xuất</button>
+    </div>
+  </div>
+  <div class="ekyc-bar" data-show="acct" hidden>
+    <div class="wrap ekyc-row">
+      <span>Tài khoản của bạn chưa xác thực eKYC. Hoàn tất để mở khoá bài viết nâng cao, dữ liệu thị trường và chứng chỉ.</span>
+      <a class="btn btn-primary btn-sm" href="{{ base }}/quyen-loi/#mo-tai-khoan">Xác thực eKYC · 3 phút</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+{% block main %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <img src="{{ base }}/img/logo-green.png" alt="DSC" width="93" height="33">
+    <nav aria-label="Liên kết cuối trang" class="footer-nav">
+      <a href="{{ base }}/#khoa-hoc">Khoá học</a>
+      <a href="{{ base }}/thuat-ngu/">Thuật ngữ</a>
+      <a href="{{ base }}/quyen-loi/">Quyền lợi tài khoản</a>
+    </nav>
+    <p class="disclaimer">{{ site.disclaimer }}</p>
+  </div>
+</footer>
+
+<aside class="demo-panel" aria-label="Chế độ demo" data-demo-panel>
+  <button type="button" class="demo-toggle" aria-expanded="false" data-demo-toggle>Demo: <strong data-demo-label>Khách</strong></button>
+  <div class="demo-body" hidden data-demo-body>
+    <p class="demo-title">Xem với vai trò</p>
+    <div class="demo-options" role="radiogroup" aria-label="Vai trò">
+      <button type="button" role="radio" data-set-tier="guest">Khách</button>
+      <button type="button" role="radio" data-set-tier="acct">Đã mở TK</button>
+      <button type="button" role="radio" data-set-tier="ekyc">Đã eKYC</button>
+    </div>
+    <button type="button" class="demo-reset" data-reset>Xoá tiến độ học</button>
+    <p class="demo-note">Bản demo: đăng nhập và phân quyền được giả lập, dữ liệu lưu trên trình duyệt này.</p>
+  </div>
+</aside>
+<div class="toast" role="status" aria-live="polite" data-toast hidden></div>
+
+<script src="{{ base }}/js/app.js" defer></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

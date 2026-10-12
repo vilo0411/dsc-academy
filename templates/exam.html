@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% set nav = 'courses' %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block body_attrs %}data-module="{{ mod.slug }}" data-page="exam"{% endblock %}
+{% block main %}
+<script type="application/json" id="exam-data">{{ {
+  "module": mod.slug, "moduleTitle": mod.title, "minutes": exam.minutes, "pass": exam.pass_pct,
+  "answers": exam.questions | map(attribute='answer') | list,
+  "topics": exam.questions | map(attribute='topic') | list
+} | json | safe }}</script>
+
+<section class="exam-intro wrap" data-exam-intro>
+  <nav aria-label="Breadcrumb" class="crumbs"><a href="{{ base }}/">Academy</a><span aria-hidden="true">/</span><a href="{{ mod.url }}">{{ mod.title }}</a></nav>
+  <h1>Bài thi cuối khoá: {{ mod.title }}</h1>
+  <dl class="stats">
+    <div><dt>Số câu</dt><dd>{{ exam.questions | length }}</dd></div>
+    <div><dt>Thời gian</dt><dd>{{ exam.minutes }} phút</dd></div>
+    <div><dt>Điểm đạt</dt><dd>{{ exam.pass_pct }}%</dd></div>
+  </dl>
+  <div class="card card-mint narrow">
+    <p class="small">Bài thi trắc nghiệm, mỗi câu một đáp án đúng. Bạn có thể đánh dấu câu để xem lại và chuyển qua lại giữa các câu trước khi nộp. Hết giờ, bài sẽ tự nộp.</p>
+    <p class="small" data-show="not-ekyc"><strong>Lưu ý:</strong> bạn vẫn làm thử được, nhưng chứng chỉ chỉ cấp cho khách hàng đã eKYC.</p>
+  </div>
+  <button type="button" class="btn btn-primary btn-lg" data-exam-start>Bắt đầu làm bài</button>
+</section>
+
+<div class="exam-shell" data-exam-shell hidden>
+  <div class="exam-top">
+    <div class="wrap exam-top-row">
+      <span class="strong">{{ mod.title }}</span>
+      <span class="timer" role="timer" aria-label="Thời gian còn lại" data-timer>{{ exam.minutes }}:00</span>
+    </div>
+  </div>
+  <div class="wrap exam-layout">
+    <section class="exam-main">
+      {% for q in exam.questions %}
+      <div class="exam-q" data-exam-q="{{ loop.index0 }}" {% if not loop.first %}hidden{% endif %}>
+        <p class="kicker">Câu {{ loop.index }} / {{ exam.questions | length }}</p>
+        <h2 class="exam-text">{{ q.q }}</h2>
+        <div class="exam-opts" role="radiogroup" aria-label="Đáp án câu {{ loop.index }}">
+          {% for o in q.options %}
+          <button type="button" role="radio" aria-checked="false" class="exam-opt" data-opt="{{ loop.index0 }}"><span class="opt-key">{{ 'ABCD'[loop.index0] }}</span><span>{{ o }}</span></button>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+      <div class="exam-actions">
+        <button type="button" class="btn btn-dashed" aria-pressed="false" data-flag>Đánh dấu xem lại</button>
+        <div class="btn-row">
+          <button type="button" class="btn btn-outline" data-prev>Câu trước</button>
+          <button type="button" class="btn btn-dark" data-next>Câu tiếp</button>
+        </div>
+      </div>
+    </section>
+    <aside class="exam-side">
+      <div class="card">
+        <div class="space-between small"><strong>Đã làm <span data-answered>0</span>/{{ exam.questions | length }}</strong><span>Đạt từ {{ ((exam.questions | length) * exam.pass_pct / 100) | round(0, 'ceil') | int }}/{{ exam.questions | length }}</span></div>
+        <div class="q-nav" data-qnav>
+          {% for q in exam.questions %}<button type="button" data-goto="{{ loop.index0 }}" aria-label="Câu {{ loop.index }}">{{ loop.index }}</button>{% endfor %}
+        </div>
+        <ul class="legend">
+          <li><span class="lg lg-done"></span>Đã làm</li><li><span class="lg lg-cur"></span>Đang xem</li><li><span class="lg lg-flag"></span>Đánh dấu</li>
+        </ul>
+      </div>
+      <button type="button" class="btn btn-primary btn-lg btn-block" data-submit>Nộp bài</button>
+    </aside>
+  </div>
+</div>
+
+<section class="wrap exam-result" data-exam-result hidden>
+  <div class="result-head">
+    <div>
+      <p class="kicker">Bài thi cuối khoá · {{ mod.title }}</p>
+      <h1 data-result-title>Kết quả</h1>
+    </div>
+    <dl class="stats">
+      <div><dt>Điểm</dt><dd data-r-score>0</dd></div>
+      <div><dt>Tỷ lệ đúng</dt><dd data-r-pct>0%</dd></div>
+      <div><dt>Thời gian</dt><dd data-r-time>0:00</dd></div>
+    </dl>
+  </div>
+  <div class="two-col two-col-tight">
+    <div class="col-main">
+      <div class="certificate" data-cert hidden>
+        <div class="cert-bands" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="cert-body">
+          <div class="space-between"><img src="{{ base }}/img/logo-green.png" alt="DSC" width="93" height="33"><span class="xsmall strong caps">DSC Academy</span></div>
+          <div>
+            <p class="eyebrow">Chứng nhận hoàn thành</p>
+            <p class="cert-name" data-cert-name>NGUYỄN VĂN A</p>
+            <p class="small">đã hoàn thành khoá học</p>
+            <p class="cert-course">{{ mod.title }}</p>
+          </div>
+          <div class="cert-foot">
+            <span>Ngày cấp<br><strong data-cert-date></strong></span>
+            <span>Mã chứng chỉ<br><strong data-cert-code></strong></span>
+            <span>Điểm<br><strong data-cert-score></strong></span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row" data-cert-actions hidden>
+        <button type="button" class="btn btn-dark" data-print>Tải PDF / In chứng chỉ</button>
+        <button type="button" class="btn btn-outline" data-copy-link>Sao chép liên kết</button>
+      </div>
+      <div class="card card-lock" data-cert-locked hidden>
+        <h2 class="h4">Chứng chỉ dành cho khách hàng đã eKYC</h2>
+        <p class="small">Bạn đã đạt bài thi. Hoàn tất mở tài khoản và eKYC để nhận chứng chỉ DSC Academy.</p>
+        <a class="btn btn-primary" href="{{ base }}/quyen-loi/#mo-tai-khoan">Mở tài khoản / eKYC</a>
+      </div>
+      <div class="card" data-fail hidden>
+        <h2 class="h4">Chưa đạt lần này</h2>
+        <p class="small">Ôn lại các chủ đề có điểm thấp bên cạnh rồi thi lại.</p>
+        <button type="button" class="btn btn-primary" data-retry>Thi lại</button>
+      </div>
+    </div>
+    <aside class="col-side">
+      <section class="card">
+        <h2 class="h4">Kết quả theo chủ đề</h2>
+        <ul class="topic-list" data-topics></ul>
+      </section>
+      <a class="card card-lime link-card" href="{{ base }}/#khoa-hoc"><span class="small">Tiếp theo</span><span class="h4">Khám phá các khoá học khác</span></a>
+    </aside>
+  </div>
+</section>
+{% endblock %}
