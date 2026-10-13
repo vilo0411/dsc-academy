@@ -280,6 +280,11 @@ def main():
         trim_blocks=True,
         lstrip_blocks=True,
     )
+    import hashlib
+    asset_v = hashlib.md5(
+        (ROOT / "static" / "css" / "style.css").read_bytes() + (ROOT / "static" / "js" / "app.js").read_bytes()
+    ).hexdigest()[:10]
+    env.globals["asset_v"] = asset_v
     env.globals.update(
         base=BASE, site=site, site_url=SITE_URL, tier_label=TIER_LABEL,
         level_label=LEVEL_LABEL, year=date.today().year, badges=badges_public,

@@ -76,9 +76,9 @@
     <p class="byline">{{ site.author }} · Cập nhật {{ a.updated.strftime('%d/%m/%Y') if a.updated.strftime is defined else a.updated }}</p>
 
     {% if a.video_url %}
-    <figure class="article-video" data-video>
+    <figure class="article-video" data-video style="margin:28px 0 0;max-width:100%">
       <div class="video-frame">
-        <video controls preload="none" playsinline {% if a.video_poster %}poster="{{ a.video_poster }}"{% endif %} data-video-el aria-label="Video bài {{ a.num }}: {{ a.title }}">
+        <video style="display:block;width:100%;height:auto;max-width:100%" controls preload="none" playsinline {% if a.video_poster %}poster="{{ a.video_poster }}"{% endif %} data-video-el aria-label="Video bài {{ a.num }}: {{ a.title }}">
           <source src="{{ a.video_url }}" type="video/mp4" data-video-src>
           Trình duyệt của bạn không phát được video. <a href="{{ a.video_url }}">Tải video</a>.
         </video>
