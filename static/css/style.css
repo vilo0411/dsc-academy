@@ -554,3 +554,11 @@ body.is-locked-page .quiz { display: none; }
 .cta-card { margin-top: 8px; }
 .badge-art.is-secret { filter: grayscale(1) blur(8px); }
 button.modal-skip { background: none; border: 0; text-decoration: underline; color: var(--pine-teal); cursor: pointer; min-height: 44px; }
+
+/* article video */
+.article-video { margin: 28px 0 0; }
+.video-frame { position: relative; background: var(--gunmetal); aspect-ratio: 16 / 9; border: 1px solid var(--hairline); overflow: hidden; }
+.video-frame video { display: block; width: 100%; height: 100%; object-fit: contain; background: var(--gunmetal); }
+.video-lock { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; text-align: center; color: var(--white); background: rgba(39,45,43,.88); }
+.article-video figcaption { margin-top: 10px; font-size: 14px; color: var(--ink-muted); }
+.video-frame.is-locked video { filter: blur(8px); }

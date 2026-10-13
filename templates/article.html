@@ -15,6 +15,19 @@
   "hasPart": ({"@type": "WebPageElement", "isAccessibleForFree": false, "cssSelector": ".article-body"} if a.tier != 'free' else none),
   "isPartOf": {"@type": "Course", "name": mod.title}
 } | json | safe }}</script>
+{% if a.video_url %}
+<script type="application/ld+json">{{ {
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": a.title,
+  "description": a.description,
+  "thumbnailUrl": site_url ~ (a.video_poster or ''),
+  "contentUrl": site_url ~ a.video_url,
+  "uploadDate": a.updated | string,
+  "duration": "PT" ~ (a.video_secs // 60) ~ "M" ~ (a.video_secs % 60) ~ "S",
+  "inLanguage": "vi"
+} | json | safe }}</script>
+{% endif %}
 {% endblock %}
 {% block main %}
 <script type="application/json" id="module-data">{{ {"slug": mod.slug, "articles": lite} | json | safe }}</script>
@@ -62,6 +75,23 @@
     <h1>{{ a.title }}</h1>
     <p class="byline">{{ site.author }} · Cập nhật {{ a.updated.strftime('%d/%m/%Y') if a.updated.strftime is defined else a.updated }}</p>
 
+    {% if a.video_url %}
+    <figure class="article-video" data-video>
+      <div class="video-frame">
+        <video controls preload="none" playsinline {% if a.video_poster %}poster="{{ a.video_poster }}"{% endif %} data-video-el aria-label="Video bài {{ a.num }}: {{ a.title }}">
+          <source src="{{ a.video_url }}" type="video/mp4" data-video-src>
+          Trình duyệt của bạn không phát được video. <a href="{{ a.video_url }}">Tải video</a>.
+        </video>
+        <div class="video-lock" data-video-lock hidden>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+          <strong>Video dành cho {{ 'khách hàng đã eKYC' if a.tier == 'ekyc' else 'khách hàng DSC' }}</strong>
+          <a class="btn btn-primary btn-sm" href="#mo-khoa">Xem cách mở khoá</a>
+        </div>
+      </div>
+      <figcaption><span class="strong">Video tóm tắt bài viết</span> · {{ a.video_len }} · Xem trước khi đọc, hoặc đọc chi tiết bên dưới.</figcaption>
+    </figure>
+    {% endif %}
+
     {% if a.takeaways %}
     <section class="takeaways" aria-label="Điểm chính">
       <h2>Điểm chính</h2>
@@ -73,7 +103,7 @@
       {{ a.html | safe }}
     </div>
 
-    <section class="paywall" aria-label="Mở khoá bài viết" data-paywall hidden>
+    <section id="mo-khoa" class="paywall" aria-label="Mở khoá bài viết" data-paywall hidden>
       <div class="pw-main">
         <p class="pw-kicker">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>

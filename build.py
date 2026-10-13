@@ -141,6 +141,25 @@ def _wrap(d, text, font, width):
     return lines
 
 
+def mp4_duration(path):
+    """Read duration (seconds) from the MP4 'mvhd' box, no external tools."""
+    data = path.read_bytes()[:4_000_000] if path.stat().st_size > 4_000_000 else path.read_bytes()
+    i = data.find(b"mvhd")
+    if i < 0:
+        data = path.read_bytes()
+        i = data.find(b"mvhd")
+        if i < 0:
+            return None
+    v = data[i + 4]
+    if v == 1:
+        scale = int.from_bytes(data[i + 24:i + 28], "big")
+        dur = int.from_bytes(data[i + 28:i + 36], "big")
+    else:
+        scale = int.from_bytes(data[i + 16:i + 20], "big")
+        dur = int.from_bytes(data[i + 20:i + 24], "big")
+    return dur / scale if scale else None
+
+
 def check_question(q, where):
     opts = q.get("options")
     if not isinstance(opts, list) or len(opts) < 2:
@@ -235,6 +254,16 @@ def main():
             a["html"] = html
             a["toc"] = toc
             a["module"] = mod
+            vfile = ROOT / "static" / "video" / mod["slug"] / (a.get("video") or f"{a['slug']}.mp4")
+            if vfile.exists():
+                rel = vfile.relative_to(ROOT / "static").as_posix()
+                secs = mp4_duration(vfile) or 0
+                a["video_url"] = f"{BASE}/{rel}"
+                poster = vfile.with_suffix(".jpg")
+                a["video_poster"] = f"{BASE}/{poster.relative_to(ROOT / 'static').as_posix()}" if poster.exists() else None
+                a["video_secs"] = int(round(secs))
+                m_, s_ = divmod(a["video_secs"], 60)
+                a["video_len"] = f"{m_}:{s_:02d}"
             for i, q in enumerate(a.get("quiz", [])):
                 q["id"] = f"q{i + 1}"
                 check_question(q, f"{f.name} quiz {i + 1}")

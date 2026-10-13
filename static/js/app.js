@@ -298,6 +298,12 @@
     if (locked) {
       document.body.classList.add('is-locked-page');
       var pw = $('[data-paywall]'); pw.hidden = false;
+      var vEl = $('[data-video-el]');
+      if (vEl) {
+        var src = $('[data-video-src]', vEl); if (src) src.remove();
+        vEl.removeAttribute('controls'); vEl.setAttribute('tabindex', '-1'); vEl.setAttribute('aria-hidden', 'true');
+        $('[data-video-lock]').hidden = false; vEl.parentNode.classList.add('is-locked');
+      }
       var needEkyc = required === 'ekyc';
       var steps = [];
       if (!isMember()) {
