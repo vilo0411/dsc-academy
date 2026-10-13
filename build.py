@@ -160,6 +160,69 @@ def mp4_duration(path):
     return dur / scale if scale else None
 
 
+def _cover_font(size, weight=700):
+    """Plus Jakarta Sans (design system) if present in assets-build/, else Inter, else DejaVu."""
+    from PIL import ImageFont
+    # static instances made in CI: assets-build/PlusJakartaSans-<weight>.ttf
+    w = 800 if weight >= 800 else 700 if weight >= 700 else 600
+    pj = ROOT / "assets-build" / f"PlusJakartaSans-{w}.ttf"
+    if pj.exists():
+        return ImageFont.truetype(str(pj), size)
+    inter = Path("/usr/share/fonts/opentype/inter") / ("Inter-Bold.otf" if weight >= 700 else "Inter-SemiBold.otf" if weight >= 600 else "Inter-Regular.otf")
+    if inter.exists():
+        return ImageFont.truetype(str(inter), size)
+    return ImageFont.truetype(str(ROOT / "assets-build" / ("DejaVuSans-Bold.ttf" if weight >= 600 else "DejaVuSans.ttf")), size)
+
+
+COVER_BLOCKS = [  # (col, row, w, h, colour) on a 4x4 grid; first entry holds the lesson number
+    (0, 0, 2, 2, "#2ad03d"), (2, 0, 1, 1, "#1bbe72"), (3, 0, 1, 1, "#8cffcc"), (2, 1, 2, 1, "#1d4130"),
+    (0, 2, 1, 1, "#1d4130"), (1, 2, 1, 1, "#8cffcc"), (2, 2, 2, 1, "#1bbe72"), (0, 3, 2, 1, "#8cffcc"), (3, 3, 1, 1, "#2ad03d"),
+]
+
+
+def video_cover(a, mod, total, path):
+    """1280x720 video cover in the DSC design system."""
+    from PIL import Image, ImageDraw
+    W, H = 1280, 720
+    im = Image.new("RGB", (W, H), INK)
+    d = ImageDraw.Draw(im)
+    # block composition on the right, mirrored per lesson for variety
+    gx, cw, ch = 760, 130, 180
+    idx = a["order"] - 1
+    flip_x, flip_y = idx % 2 == 1, (idx // 2) % 2 == 1
+    for i, (c, r, w, h, col) in enumerate(COVER_BLOCKS):
+        if flip_x:
+            c = 4 - c - w
+        if flip_y:
+            r = 4 - r - h
+        x0, y0 = gx + c * cw, r * ch
+        d.rectangle([x0, y0, x0 + w * cw - 1, y0 + h * ch - 1], fill=col)
+        if i == 0:
+            d.text((x0 + w * cw / 2, y0 + h * ch / 2), a["num"], font=_cover_font(170, 800), fill=INK, anchor="mm")
+    # logo
+    logo = Image.open(ROOT / "static" / "img" / "logo-green.png").convert("RGBA")
+    logo = logo.resize((int(logo.width * 1.6), int(logo.height * 1.6)), Image.LANCZOS)
+    im.paste(logo, (72, 64), logo)
+    d.line([(72 + logo.width + 18, 66), (72 + logo.width + 18, 64 + logo.height - 2)], fill="#ffffff", width=2)
+    d.text((72 + logo.width + 34, 64 + logo.height / 2), "Academy", font=_cover_font(28, 700), fill="#ffffff", anchor="lm")
+    # kicker + title
+    d.text((72, 214), f"{mod['title'].upper()} · BÀI {a['num']} / {total:02d}", font=_cover_font(22, 700), fill="#8cffcc")
+    tf, y = _cover_font(58, 700), 258
+    lines = _wrap(d, a["title"], tf, 620)
+    if len(lines) > 4:
+        tf = _cover_font(48, 700)
+        lines = _wrap(d, a["title"], tf, 620)
+    for line in lines[:5]:
+        d.text((72, y), line, font=tf, fill="#ffffff")
+        y += int(tf.size * 1.18)
+    # play button + duration
+    by = H - 72 - 76
+    d.rectangle([72, by, 72 + 76, by + 76], fill="#2ad03d")
+    d.polygon([(100, by + 22), (100, by + 54), (128, by + 38)], fill=INK)
+    d.text((72 + 76 + 24, by + 38), f"Xem video · {a['video_len']}", font=_cover_font(28, 600), fill="#ffffff", anchor="lm")
+    im.save(path, quality=86, optimize=True, progressive=True)
+
+
 def check_question(q, where):
     opts = q.get("options")
     if not isinstance(opts, list) or len(opts) < 2:
@@ -259,16 +322,20 @@ def main():
                 rel = vfile.relative_to(ROOT / "static").as_posix()
                 secs = mp4_duration(vfile) or 0
                 a["video_url"] = f"{BASE}/{rel}"
-                poster = vfile.with_suffix(".jpg")
-                a["video_poster"] = f"{BASE}/{poster.relative_to(ROOT / 'static').as_posix()}" if poster.exists() else None
                 a["video_secs"] = int(round(secs))
                 m_, s_ = divmod(a["video_secs"], 60)
                 a["video_len"] = f"{m_}:{s_:02d}"
+                a["video_poster"] = f"{BASE}/img/video-covers/{mod['slug']}/{a['slug']}.jpg"
             for i, q in enumerate(a.get("quiz", [])):
                 q["id"] = f"q{i + 1}"
                 check_question(q, f"{f.name} quiz {i + 1}")
             mod["articles"].append(a)
         mod["articles"].sort(key=lambda a: a["order"])
+        covers = DIST / "img" / "video-covers" / mod["slug"]
+        for a in mod["articles"]:
+            if a.get("video_url"):
+                covers.mkdir(parents=True, exist_ok=True)
+                video_cover(a, mod, len(mod["articles"]), covers / f"{a['slug']}.jpg")
         mod["tiers"] = [a["tier"] for a in mod["articles"]]
         mod["minutes"] = sum(a.get("minutes", 0) for a in mod["articles"])
         exam_file = CONTENT / "bai-thi" / f"{mod['slug']}.yaml"
